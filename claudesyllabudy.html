@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyllaBuddy – Orbital 2026 Poster</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    font-family: 'Inter', sans-serif;
+    width: 794px;
+    min-height: 1123px;
+    margin: 0 auto;
+    padding: 32px 36px 28px;
+    color: #111;
+  }
+
+  @page { size: A4 portrait; margin: 0; }
+  @media print {
+    body { width: 210mm; min-height: 297mm; padding: 18mm; }
+  }
+
+  /* ── TOP META BAR ── */
+  .top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10.5px;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .top-meta strong { color: #111; }
+
+  /* ── THICK RULE ── */
+  .rule-thick {
+    border: none;
+    border-top: 4px solid #111;
+    margin: 0 0 4px;
+  }
+  .rule-thin {
+    border: none;
+    border-top: 1.5px solid #111;
+    margin: 0 0 10px;
+  }
+  .rule-mid {
+    border: none;
+    border-top: 2px solid #111;
+    margin: 10px 0 10px;
+  }
+
+  /* ── HEADER TITLE BLOCK ── */
+  .title-block {
+    text-align: center;
+    padding: 10px 0 8px;
+  }
+  .title-block h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    letter-spacing: 2px;
+    color: #111;
+    line-height: 0.95;
+  }
+  .title-block .tagline {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.3px;
+    margin-top: 6px;
+  }
+
+  /* ── INTRO ROW (text + phone mockups) ── */
+  .intro-row {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 22px;
+    margin-top: 10px;
+  }
+  .intro-text h2 {
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #111;
+    margin-bottom: 6px;
+  }
+  .intro-text p {
+    font-size: 11.5px;
+    color: #333;
+    line-height: 1.65;
+  }
+  .intro-text p + p { margin-top: 6px; }
+
+  /* problem tags */
+  .problem-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 9px;
+  }
+  .ptag {
+    font-size: 10px;
+    font-weight: 600;
+    border: 1.5px solid #111;
+    border-radius: 3px;
+    padding: 2px 8px;
+    color: #111;
+  }
+  .ptag.filled { background: #111; color: #fff; }
+
+  /* ── PHONE MOCKUPS ── */
+  .phones {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .phone {
+    width: 90px;
+    background: #111;
+    border-radius: 14px;
+    padding: 7px 5px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .phone-notch {
+    width: 26px; height: 5px;
+    background: #333; border-radius: 3px;
+    margin: 0 auto 5px;
+  }
+  .phone-screen {
+    background: #fff;
+    border-radius: 8px;
+    padding: 7px 6px;
+    min-height: 120px;
+  }
+  .p-logo {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: #4b6bfb;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 5px;
+  }
+  .p-title { font-size: 8px; font-weight: 700; color: #111; text-align: center; margin-bottom: 8px; }
+  .p-btn {
+    background: #111; color: #fff;
+    border-radius: 4px; font-size: 7.5px; font-weight: 600;
+    text-align: center; padding: 3px 0; margin-bottom: 3px;
+  }
+  .p-btn.out {
+    background: #fff; color: #111;
+    border: 1px solid #111;
+  }
+  .p-row {
+    display: flex; align-items: center; gap: 4px;
+    border-bottom: 0.5px solid #eee; padding: 2.5px 0;
+    font-size: 7px; color: #444;
+  }
+  .p-row:last-child { border-bottom: none; }
+  .p-dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #4b6bfb; flex-shrink: 0;
+  }
+  .p-tag {
+    margin-left: auto;
+    background: #f0f0f0; border-radius: 2px;
+    font-size: 6.5px; font-weight: 600; color: #333;
+    padding: 1px 4px;
+  }
+  .p-week { font-size: 6.5px; font-weight: 700; color: #999; margin-top: 3px; margin-bottom: 1px; }
+  .p-slot {
+    border-radius: 3px; font-size: 7px; font-weight: 600;
+    padding: 2px 4px; margin-bottom: 2px;
+  }
+  .slot-blue { background: #e8edff; color: #2a4bcc; }
+  .slot-green { background: #e4f8ed; color: #1a6b46; }
+  .slot-yellow { background: #fdf5d0; color: #7a5800; }
+
+  /* ── MAIN TWO-COLUMN BODY ── */
+  .body-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 0;
+  }
+  .col-left, .col-right { display: flex; flex-direction: column; gap: 0; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 10px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #111;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .section-title .s-icon { font-size: 12px; }
+
+  /* ── FEATURE LIST ── */
+  .feat-item {
+    display: flex;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 0.75px solid #e5e5e5;
+    align-items: flex-start;
+  }
+  .feat-item:last-child { border-bottom: none; }
+  .fi-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .fi-name { font-size: 11px; font-weight: 700; color: #111; }
+  .fi-desc { font-size: 10.5px; color: #555; line-height: 1.45; margin-top: 1px; }
+  .ext-badge {
+    font-size: 8.5px; font-weight: 600; color: #888;
+    background: #f0f0f0; border-radius: 3px;
+    padding: 0px 5px; margin-left: 4px; vertical-align: middle;
+  }
+
+  /* ── BULLET LIST ── */
+  .blist { padding: 0; list-style: none; }
+  .blist li {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.55;
+    padding: 2.5px 0 2.5px 13px;
+    position: relative;
+    border-bottom: 0.75px solid #eee;
+  }
+  .blist li:last-child { border-bottom: none; }
+  .blist li::before {
+    content: '▸';
+    position: absolute; left: 0; top: 4px;
+    font-size: 8px; color: #111;
+  }
+
+  /* ── TECH STACK PILLS ── */
+  .tech-row {
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .tech-chip {
+    border: 1.5px solid #111;
+    border-radius: 3px;
+    font-size: 10px; font-weight: 600; color: #111;
+    padding: 2px 8px;
+  }
+  .tech-chip.filled { background: #111; color: #fff; }
+
+  /* ── TESTING BADGES ── */
+  .test-row {
+    display: flex; gap: 7px;
+    align-items: flex-start;
+    padding: 5px 0;
+    border-bottom: 0.75px solid #e5e5e5;
+  }
+  .test-row:last-child { border-bottom: none; }
+  .t-badge {
+    font-size: 8.5px; font-weight: 700;
+    border: 1.5px solid #111;
+    border-radius: 3px; padding: 2px 6px;
+    flex-shrink: 0; margin-top: 1px;
+    white-space: nowrap;
+  }
+  .t-badge.filled { background: #111; color: #fff; }
+
+  /* ── USER STORIES ── */
+  .story {
+    font-size: 11px; color: #333; line-height: 1.55;
+    padding: 5px 0;
+    border-bottom: 0.75px solid #eee;
+  }
+  .story:last-child { border-bottom: none; }
+  .story strong { color: #111; }
+
+  /* ── TIMETABLE MOCK ── */
+  .tt-mock {
+    border: 1.5px solid #111;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .tt-mock-bar {
+    background: #111; color: #fff;
+    font-size: 9px; font-weight: 600;
+    padding: 4px 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tt-mock-body { padding: 7px 8px; }
+  .tt-legend { font-size: 8.5px; color: #666; margin-bottom: 5px; }
+  table.tt { width: 100%; border-collapse: collapse; }
+  table.tt th {
+    font-size: 7.5px; color: #999; font-weight: 600;
+    text-align: center; padding: 1.5px 0;
+  }
+  table.tt td {
+    text-align: center; padding: 1.5px 1px;
+    border: 0.5px solid #f0f0f0;
+  }
+  .tt-mod { font-size: 8px; font-weight: 700; color: #111; text-align: left !important; padding-left: 3px !important; }
+  .tc { border-radius: 2px; padding: 1px 2px; font-size: 7.5px; font-weight: 600; }
+  .tc-e { background: #d4f7e4; color: #1a6b46; }
+  .tc-m { background: #fff1cc; color: #7a5800; }
+  .tc-h { background: #ffe0e0; color: #a32d2d; }
+  .tt-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 4px; margin-top: 6px;
+  }
+  .tt-stat {
+    background: #f7f7f7; border-radius: 4px;
+    padding: 4px 5px; text-align: center;
+  }
+  .tt-stat-lbl { font-size: 8px; color: #888; }
+  .tt-stat-val { font-size: 12px; font-weight: 700; color: #111; }
+  .tt-stat-val.red { color: #d63b3b; }
+
+  /* ── SOCIAL MOCK ── */
+  .social-mock {
+    border: 1.5px solid #111; border-radius: 6px; overflow: hidden;
+  }
+  .social-bar {
+    background: #111; color: #fff; font-size: 9px; font-weight: 600;
+    padding: 4px 8px; display: flex; justify-content: space-between;
+  }
+  .social-body { padding: 7px 8px; }
+  .s-stats-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-bottom: 6px;
+  }
+  .s-stat { background: #f7f7f7; border-radius: 4px; padding: 4px 5px; text-align: center; }
+  .s-stat-lbl { font-size: 8px; color: #888; }
+  .s-stat-val { font-size: 11px; font-weight: 700; color: #111; }
+  .s-card {
+    border: 1px solid #e5e5e5; border-radius: 5px;
+    padding: 5px 7px; display: flex; gap: 6px;
+    align-items: flex-start; margin-bottom: 5px;
+  }
+  .s-av {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #111; color: #fff; font-size: 8px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .s-name { font-size: 9.5px; font-weight: 700; color: #111; }
+  .s-sub  { font-size: 8.5px; color: #777; }
+  .s-tags { margin-top: 2px; }
+  .s-chip {
+    font-size: 8px; background: #f0f0f0; color: #333;
+    border-radius: 2px; padding: 1px 4px; font-weight: 600;
+  }
+  .s-connect {
+    margin-left: auto; background: #111; color: #fff;
+    font-size: 8px; font-weight: 600;
+    border-radius: 4px; padding: 3px 8px; flex-shrink: 0;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative; display: flex;
+    gap: 0; margin-top: 6px;
+  }
+  .timeline::before {
+    content: ''; position: absolute;
+    top: 14px; left: 4%; right: 4%;
+    height: 2px; background: #111; z-index: 0;
+  }
+  .ms { flex: 1; text-align: center; position: relative; z-index: 1; }
+  .ms-dot {
+    width: 14px; height: 14px; background: #111; border-radius: 50%;
+    margin: 7px auto 5px; border: 2.5px solid #fff;
+    box-shadow: 0 0 0 1.5px #111;
+  }
+  .ms-label { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #111; }
+  .ms-tasks { font-size: 9px; color: #555; line-height: 1.5; margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 2px solid #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left { font-size: 10.5px; color: #555; line-height: 1.7; }
+  .footer-left strong { color: #111; font-size: 12px; }
+  .footer-stores { display: flex; gap: 7px; margin-top: 5px; }
+  .store-btn {
+    background: #111; color: #fff;
+    font-size: 8.5px; font-weight: 600;
+    border-radius: 5px; padding: 4px 10px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .footer-right {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px; color: #111; opacity: 0.08; letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP META -->
+<div class="top-meta">
+  <span><strong>NUS Orbital 2026</strong> · Apollo 11</span>
+  <span>Team LawnMower272 &nbsp;·&nbsp; Shu Chang Yu &amp; Ng Jun Kai</span>
+</div>
+
+<hr class="rule-thick">
+<hr class="rule-thin" style="margin-top:3px;">
+
+<!-- TITLE -->
+<div class="title-block">
+  <h1>SyllaBuddy</h1>
+  <div class="tagline">Your NUS Academic Planner &amp; Community — Effortlessly Organised.</div>
+</div>
+
+<hr class="rule-thick" style="margin-top:8px;">
+<hr class="rule-thin" style="margin-top:3px;">
+
+<!-- INTRO ROW: who we are + phone mockups -->
+<div class="intro-row">
+  <div class="intro-text">
+    <h2>Who Are We?</h2>
+    <p>
+      University life throws <strong>scattered deadlines, inconsistent workloads</strong> and zero follow-up from lecturers at freshmen who are used to being guided. Five modules, each with random mid-term submissions, lab reports and project milestones — all invisible until they sneak up on you.
+    </p>
+    <p>
+      The existing NUSMods planner only shows class timings and final exams, leaving the <em>actual</em> academic timeline a mystery. SyllaBuddy solves this with a community-powered deadline tracker and senior connection platform.
+    </p>
+    <div class="problem-tags">
+      <span class="ptag filled">😵 Scattered deadlines</span>
+      <span class="ptag">📅 Unpredictable workloads</span>
+      <span class="ptag">⚠️ No assignment timeline</span>
+      <span class="ptag">🤝 No peer insights</span>
+    </div>
+  </div>
+  <div class="phones">
+    <!-- Phone 1: Login -->
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="p-logo">SB</div>
+        <div class="p-title">SyllaBuddy</div>
+        <div class="p-btn">Login</div>
+        <div class="p-btn out">Register</div>
+      </div>
+    </div>
+    <!-- Phone 2: Profile -->
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+          <div style="width:16px;height:16px;border-radius:50%;background:#111;flex-shrink:0;"></div>
+          <div style="font-size:7px;font-weight:700;color:#111;">Alex Tan</div>
+        </div>
+        <div style="font-size:7.5px;font-weight:700;color:#111;margin-bottom:3px;">Profile</div>
+        <div class="p-row"><div class="p-dot"></div><span>Course</span><span class="p-tag">CS</span></div>
+        <div class="p-row"><div class="p-dot" style="background:#1a6b46;"></div><span>Year</span><span class="p-tag">1</span></div>
+        <div class="p-row"><div class="p-dot" style="background:#a32d2d;"></div><span>Modules</span><span class="p-tag">4</span></div>
+        <div class="p-row"><div class="p-dot" style="background:#7a5800;"></div><span>Friends</span><span class="p-tag">12</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule-mid">
+
+<!-- MAIN TWO-COLUMN BODY -->
+<div class="body-cols">
+
+  <!-- ═══ LEFT COLUMN ═══ -->
+  <div class="col-left">
+
+    <!-- Core Features -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">✦</span> Core Features</div>
+      <div class="feat-item">
+        <div class="fi-icon">📋</div>
+        <div><div class="fi-name">Assignment Timetable</div><div class="fi-desc">Colour-coded by difficulty (Easy / Medium / Hard) based on past user data. Tick off completed tasks and spot heavy workload weeks at a glance.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">👥</div>
+        <div><div class="fi-name">Social Interface</div><div class="fi-desc">Connect with seniors who have taken your modules. Get personal advice, workload insights and real grades — not just official course descriptions.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">👤</div>
+        <div><div class="fi-name">User Profile</div><div class="fi-desc">Personalised profile with module ratings and comments. Track your academic journey and build your student network.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">🤖</div>
+        <div><div class="fi-name">AI Chatbot <span class="ext-badge">Extension</span></div><div class="fi-desc">Answers generic course questions instantly. Saves seniors' time and gives freshmen quick answers 24/7.</div></div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">🔔</div>
+        <div><div class="fi-name">Push Notifications <span class="ext-badge">Extension</span></div><div class="fi-desc">Smart reminders for uncompleted assignments. Never miss a deadline again.</div></div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #e5e5e5;margin-bottom:10px;">
+
+    <!-- Software Engineering Principles -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">🏗</span> Software Engineering Principles</div>
+      <div style="margin-bottom:8px;">
+        <div style="font-size:10.5px;font-weight:700;color:#111;margin-bottom:3px;">🔀 Version Control</div>
+        <ul class="blist">
+          <li>Git with structured branching &amp; merging per feature</li>
+          <li>Feature branches tested thoroughly before PR merge</li>
+          <li>Small, frequent commits with meaningful messages</li>
+        </ul>
+      </div>
+      <div style="margin-bottom:8px;">
+        <div style="font-size:10.5px;font-weight:700;color:#111;margin-bottom:3px;">📌 Project Management</div>
+        <ul class="blist">
+          <li>Agile approach — tasks planned before each milestone</li>
+          <li>GitHub Issues to log blockers and ensure timely resolution</li>
+          <li>Weekly check-ins to review progress and reassign tasks</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:10.5px;font-weight:700;color:#111;margin-bottom:3px;">🛡 Security &amp; Data Protection</div>
+        <ul class="blist">
+          <li>API keys &amp; credentials stored in .env, never committed</li>
+          <li>User passwords hashed before saving to database</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #e5e5e5;margin-bottom:10px;">
+
+    <!-- Testing -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">🧪</span> Testing Strategy</div>
+      <div class="test-row">
+        <span class="t-badge filled">Unit</span>
+        <div><div class="fi-name" style="font-size:11px;">Unit Testing</div><div class="fi-desc">Functions and backend algorithms tested in isolation to verify correct logic and data transformations.</div></div>
+      </div>
+      <div class="test-row">
+        <span class="t-badge">Integration</span>
+        <div><div class="fi-name" style="font-size:11px;">Integration Testing</div><div class="fi-desc">Combined modules tested together — especially timetable merging, module rating system, and chat flows.</div></div>
+      </div>
+      <div class="test-row">
+        <span class="t-badge">User</span>
+        <div><div class="fi-name" style="font-size:11px;">User Testing</div><div class="fi-desc">Real NUS students test for usability, identify gaps in onboarding, and provide workload feedback.</div></div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #e5e5e5;margin-bottom:10px;">
+
+    <!-- Tech Stack + Aims -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">⚙</span> Tech Stack</div>
+      <div class="tech-row">
+        <span class="tech-chip filled">React.js</span>
+        <span class="tech-chip filled">Python</span>
+        <span class="tech-chip">PostgreSQL</span>
+        <span class="tech-chip">GitHub</span>
+        <span class="tech-chip">REST API</span>
+      </div>
+      <div style="margin-top:9px;">
+        <div class="section-title" style="margin-bottom:4px;"><span class="s-icon">🎯</span> Aims</div>
+        <ul class="blist">
+          <li>Improve organisation of academic deadlines</li>
+          <li>Connect students with seniors for course insights</li>
+          <li>Integrate with the existing NUSMods ecosystem</li>
+          <li>Ease freshman transition into university life</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ RIGHT COLUMN ═══ -->
+  <div class="col-right">
+
+    <!-- Timetable Mock UI -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">🖥</span> Timetable View</div>
+      <div class="tt-mock">
+        <div class="tt-mock-bar">
+          <span>SyllaBuddy · AY2526 S1</span>
+          <span>4 modules · 13 weeks</span>
+        </div>
+        <div class="tt-mock-body">
+          <div class="tt-legend">🟢 Easy &nbsp;🟡 Medium &nbsp;🔴 Hard</div>
+          <table class="tt">
+            <tr>
+              <th style="text-align:left;width:46px;"></th>
+              <th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th>
+              <th>W6</th><th>W7</th><th>W8</th><th>W9</th><th>W10</th>
+              <th>W11</th><th>W12</th><th>W13</th>
+            </tr>
+            <tr>
+              <td class="tt-mod">CS2103T</td>
+              <td></td>
+              <td><span class="tc tc-e">iP L1</span></td>
+              <td><span class="tc tc-e">iP L2</span></td>
+              <td><span class="tc tc-e">iP L3</span></td>
+              <td><span class="tc tc-m">iP L4</span></td>
+              <td><span class="tc tc-m">iP L5</span></td>
+              <td><span class="tc tc-h">tP v1</span></td>
+              <td><span class="tc tc-h">v1.1</span></td>
+              <td></td>
+              <td><span class="tc tc-h">tP v2</span></td>
+              <td></td>
+              <td><span class="tc tc-h">Final</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="tt-mod">MA2001</td>
+              <td></td>
+              <td><span class="tc tc-e">HW1</span></td>
+              <td></td>
+              <td><span class="tc tc-e">HW2</span></td>
+              <td></td>
+              <td><span class="tc tc-m">HW3</span></td>
+              <td></td>
+              <td><span class="tc tc-h">Mid</span></td>
+              <td><span class="tc tc-m">HW4</span></td>
+              <td></td>
+              <td><span class="tc tc-m">HW5</span></td>
+              <td></td>
+              <td><span class="tc tc-h">Finals</span></td>
+            </tr>
+            <tr>
+              <td class="tt-mod">EE2026</td>
+              <td></td><td></td>
+              <td><span class="tc tc-e">Lab 1</span></td>
+              <td></td>
+              <td><span class="tc tc-e">Lab 2</span></td>
+              <td></td>
+              <td><span class="tc tc-e">Lab 3</span></td>
+              <td><span class="tc tc-h">Proj</span></td>
+              <td></td>
+              <td><span class="tc tc-m">Lab 4</span></td>
+              <td></td>
+              <td><span class="tc tc-e">Lab 5</span></td>
+              <td><span class="tc tc-h">Finals</span></td>
+            </tr>
+            <tr>
+              <td class="tt-mod">GEC1030</td>
+              <td></td><td></td>
+              <td><span class="tc tc-e">Refl.</span></td>
+              <td></td><td></td>
+              <td><span class="tc tc-m">Essay</span></td>
+              <td></td><td></td>
+              <td><span class="tc tc-m">Pres.</span></td>
+              <td></td><td></td>
+              <td><span class="tc tc-h">Final</span></td>
+              <td></td>
+            </tr>
+          </table>
+          <div class="tt-stats">
+            <div class="tt-stat"><div class="tt-stat-lbl">This Week</div><div class="tt-stat-val">0</div><div class="tt-stat-lbl">deadlines</div></div>
+            <div class="tt-stat"><div class="tt-stat-lbl">Completed</div><div class="tt-stat-val">3</div><div class="tt-stat-lbl">tasks</div></div>
+            <div class="tt-stat"><div class="tt-stat-lbl">Peak Week</div><div class="tt-stat-val red">W8</div><div class="tt-stat-lbl">4 due</div></div>
+            <div class="tt-stat"><div class="tt-stat-lbl">Modules</div><div class="tt-stat-val">4</div><div class="tt-stat-lbl">enrolled</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Mock UI -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">🤝</span> Social Interface</div>
+      <div class="social-mock">
+        <div class="social-bar">
+          <span>syllabuddy.app/connect</span>
+          <span>Connect with Seniors</span>
+        </div>
+        <div class="social-body">
+          <div class="s-stats-row">
+            <div class="s-stat"><div class="s-stat-lbl">Mentors</div><div class="s-stat-val">127</div></div>
+            <div class="s-stat"><div class="s-stat-lbl">Your Courses</div><div class="s-stat-val">4</div></div>
+            <div class="s-stat"><div class="s-stat-lbl">Avg Reply</div><div class="s-stat-val">2.3h</div></div>
+          </div>
+          <div class="s-card">
+            <div class="s-av">MR</div>
+            <div style="flex:1;">
+              <div class="s-name">Michael Rodriguez ⭐ 4.9</div>
+              <div class="s-sub">4th Year · Computer Science</div>
+              <div class="s-tags"><span class="s-chip">CS2103T A</span> <span class="s-chip">MA2001 A-</span></div>
+            </div>
+            <div class="s-connect">Connect</div>
+          </div>
+          <div class="s-card">
+            <div class="s-av" style="background:#1a6b46;">SL</div>
+            <div style="flex:1;">
+              <div class="s-name">Sophia Lee ⭐ 5.0</div>
+              <div class="s-sub">Graduate · Computer Science (MS)</div>
+              <div class="s-tags"><span class="s-chip">EE2026 A+</span></div>
+            </div>
+            <div class="s-connect">Connect</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #e5e5e5;margin-bottom:10px;">
+
+    <!-- User Stories -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">💬</span> User Stories</div>
+      <div class="story"><strong>As an incoming freshman</strong> exploring courses, I want to find and compare module workloads before bidding so I can make informed choices.</div>
+      <div class="story"><strong>As a student</strong> taking a new module, I want to see exactly when assignments are due across all 13 weeks so I can plan ahead.</div>
+      <div class="story"><strong>As a busy freshman</strong> juggling CCAs and coursework, I want to see which weeks are heavy at a glance so I can manage my time.</div>
+      <div class="story"><strong>As a senior</strong>, I want to share my module experience and grades to help juniors make better academic choices.</div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #e5e5e5;margin-bottom:10px;">
+
+    <!-- Timeline -->
+    <div class="section">
+      <div class="section-title"><span class="s-icon">🗓</span> Development Timeline</div>
+      <div class="timeline">
+        <div class="ms">
+          <div class="ms-dot"></div>
+          <div class="ms-label">Milestone 1</div>
+          <div class="ms-tasks">User auth<br>DB schema<br>Timetable UI</div>
+        </div>
+        <div class="ms">
+          <div class="ms-dot"></div>
+          <div class="ms-label">Milestone 2</div>
+          <div class="ms-tasks">Module merging<br>Social interface<br>Rating system</div>
+        </div>
+        <div class="ms">
+          <div class="ms-dot"></div>
+          <div class="ms-label">Milestone 3</div>
+          <div class="ms-tasks">AI Chatbot<br>Push alerts<br>Full integration</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<hr class="rule-thick" style="margin-top:12px;">
+<div class="footer">
+  <div class="footer-left">
+    <strong>SyllaBuddy</strong> · Team LawnMower272<br>
+    Shu Chang Yu &amp; Ng Jun Kai · NUS Orbital 2026 · Apollo 11
+    <div class="footer-stores">
+      <div class="store-btn">🍎 App Store</div>
+      <div class="store-btn">▶ Google Play</div>
+    </div>
+  </div>
+  <div class="footer-right">SYLLABUDDY</div>
+</div>
+
+</body>
+</html>
