@@ -1,7 +1,5 @@
-Lets just use google docs to do our readme
-https://docs.google.com/document/d/1DNIYkWR90g3snFbh1L9jIdFC9gNp17uTS-MPHvrKUos/edit?tab=t.mipcm3kk583c
+Dear all, Our glorious team is called LawnMower272
 
-project log too
+lets js use google docs to do the readme & google sheets(?) for porject log I dont understand how this works
 
-Hi all
-This is a timetabling app that aims to help students assimilate into university easier!
+hello world!
