@@ -1,3 +1,4 @@
+//File from template dont touch
 import {
   isRouteErrorResponse,
   Links,

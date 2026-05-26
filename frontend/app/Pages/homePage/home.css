@@ -1,0 +1,196 @@
+/* Load two Google Fonts:
+   - Instrument Serif: used for the logo (elegant, editorial feel)
+   - DM Sans: used for all other text (clean, modern) */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* CSS variables — define all colors here so they're easy to change globally */
+:root {
+  --bg: #0a0a0f;              /* near-black page background */
+  --surface: #13131a;         /* slightly lighter dark, used for button backgrounds */
+  --border: rgba(255, 255, 255, 0.07); /* very subtle white border */
+  --text: #e8e6f0;            /* off-white for main text */
+  --muted: #6b6880;           /* grey for secondary text like the tagline */
+  --accent: #c8f060;          /* lime green — the main brand color */
+  --accent-dark: #a8d040;     /* darker lime for hover states */
+}
+
+/* Reset default browser styles so everything looks consistent */
+* {
+  box-sizing: border-box; /* padding doesn't add to element width */
+  margin: 0;
+  padding: 0;
+}
+
+/* Full page wrapper — centers everything vertically and horizontally */
+.home {
+  min-height: 100svh;         /* 100% of the screen height (svh = small viewport height, handles mobile browsers) */
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* center horizontally */
+  justify-content: center;    /* center vertically */
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  position: relative;         /* needed so absolute children position relative to this */
+  overflow: hidden;           /* hides background elements that go outside the page */
+}
+
+/* Grain/noise texture — a tiny SVG rendered as a background image
+   pointer-events: none means clicks pass through it to elements below */
+.noise {
+  position: fixed;            /* stays in place even when scrolling */
+  inset: 0;                   /* shorthand for top/right/bottom/left: 0 (covers full screen) */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;       /* decorative only — doesn't block clicks */
+  z-index: 1;                 /* sits above the grid but below content */
+  opacity: 0.4;
+}
+
+/* Subtle grid lines in the background — two overlapping linear gradients
+   one horizontal, one vertical, to create a grid pattern */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),   /* horizontal lines */
+    linear-gradient(90deg, var(--border) 1px, transparent 1px); /* vertical lines */
+  background-size: 48px 48px; /* one grid cell = 48x48px */
+  pointer-events: none;
+  z-index: 0;
+  /* mask-image fades the grid out at the edges, so it's only visible in the center */
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+}
+
+/* Main content column — stacks children vertically with spacing */
+.center {
+  position: relative;
+  z-index: 2;                 /* sits above both background layers */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;                  /* space between each child element */
+  text-align: center;
+  padding: 0 24px;
+  /* entire block fades up on page load */
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Keyframe animation — elements start 24px below and invisible, then rise into place */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px); /* start 24px lower */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);    /* end at normal position */
+  }
+}
+
+/* Small pill label above the logo */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200, 240, 96, 0.08); /* very faint lime green background */
+  border: 1px solid rgba(200, 240, 96, 0.2);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;      /* spaced out letters */
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;       /* fully rounded pill shape */
+  animation: fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both; /* 0.1s delay */
+}
+
+/* App name — large serif font */
+.logo {
+  font-family: 'Instrument Serif', serif;
+  /* clamp(min, preferred, max) — scales with viewport but stays within bounds */
+  font-size: clamp(56px, 10vw, 100px);
+  font-weight: 400;
+  letter-spacing: -0.03em;    /* slightly tighter tracking looks better at large sizes */
+  line-height: 1;
+  color: var(--text);
+  animation: fadeUp 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both; /* 0.2s delay */
+}
+
+/* The period after "syllabuddy" — colored lime green as a brand detail */
+.dot {
+  color: var(--accent);
+}
+
+/* Tagline text below the logo */
+.tagline {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--muted);        /* grey, less prominent than the logo */
+  line-height: 1.7;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; /* 0.3s delay */
+}
+
+/* Button row — wraps to two rows on very small screens */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;            /* buttons stack vertically on small screens */
+  justify-content: center;
+  animation: fadeUp 0.8s 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; /* 0.4s delay — last to appear */
+}
+
+/* Shared styles for both buttons */
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 13px 32px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;  /* smooth hover animation */
+  letter-spacing: 0.01em;
+  text-decoration: none;      /* removes underline since Link renders as <a> */
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Primary button — solid lime green fill */
+.btn-primary {
+  background: var(--accent);
+  color: #0a0a0f;             /* dark text on bright background for contrast */
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px); /* lifts up slightly on hover */
+  box-shadow: 0 8px 24px rgba(200, 240, 96, 0.25); /* lime green glow */
+}
+
+/* Secondary button — dark background with subtle border */
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* When clicked, snap back to original position */
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Copyright text pinned to the bottom of the screen */
+.footer {
+  position: absolute;
+  bottom: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  z-index: 2;
+  letter-spacing: 0.05em;
+}
