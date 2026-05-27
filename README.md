@@ -58,3 +58,4 @@ alembic current             # show which migration your DB is on
 alembic history             # list all migrations
 
 to test backend code: uvicorn app.test:app --reload 
+database user: username: test123, email: 123@gmail.com, password: 123
