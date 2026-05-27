@@ -56,3 +56,5 @@ bashalembic upgrade head        # apply all pending migrations
 alembic downgrade -1        # undo the last migration
 alembic current             # show which migration your DB is on
 alembic history             # list all migrations
+
+to test backend code: uvicorn app.test:app --reload 
