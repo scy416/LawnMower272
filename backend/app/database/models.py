@@ -1,4 +1,4 @@
-from database import Base
+from app.database.database import Base
 from sqlalchemy import Column, Integer, String
 
 class User(Base): #creating a class of users that inherits from parent class "Base"
