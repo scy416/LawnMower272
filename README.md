@@ -9,3 +9,5 @@ To visit homepage:
 cd "frontend"
 npm run dev
 copy localhost link to browser 
+
+Website navigation framework: https://reactrouter.com/start/framework/routing 
