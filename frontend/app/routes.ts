@@ -5,5 +5,5 @@ export default [
     index("Pages/homePage/home.tsx"),
     route("Login", "Pages/login/login.tsx"),
     route("SignUp", "Pages/signUp/signUp.tsx"),
-    route("Dashboard", "Pages/dashboard/dashboard.tsx")
+    route("Timetable", "Pages/timetable/timetable.tsx")
 ] satisfies RouteConfig;

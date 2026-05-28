@@ -32,7 +32,7 @@ export default function Login() {
       localStorage.setItem("access_token", data.access_token);
 
       // redirect to dashboard (create this route later)
-      navigate("/dashboard");
+      navigate("/timetable");
     } catch {
       setError("Could not connect to server");
     } finally {
