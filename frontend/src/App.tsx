@@ -8,7 +8,7 @@ interface Assignment {
   deadline: string; // Expecting a week indicator like "W1", "W2", etc.
 }
 
-function App() {
+function Timetable() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [moduleInput, setModuleInput] = useState<string>('');
 
@@ -167,4 +167,4 @@ function App() {
   );
 }
 
-export default App;
+export default Timetable;
