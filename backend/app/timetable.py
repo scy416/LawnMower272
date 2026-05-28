@@ -4,10 +4,8 @@ from typing import List # type inference for lists
 
 router = APIRouter()
 
-class CreateAssignment(BaseModel):
-    module: str
-    assignment_name: str
-    deadline: str 
+class ModuleRequest(BaseModel):
+    module_code: str
 
 class AssignmentCreated(BaseModel):
     module: str
@@ -20,17 +18,24 @@ class AssignmentCreated(BaseModel):
 # List[] - you must typehint as a requirement of FastAPI
 @router.get("/api/timetable", response_model=List[AssignmentCreated])
 def get_timetable():
-    return mock_timetable
+    return []
 
 # receives a new assignment from the frontend and saves it to the backend
-@router.post("/api/timetable", response_model=AssignmentCreated)
-def create_assignment(assignment: CreateAssignment):
-    new_id = len(mock_timetable) + 1
-    new_assignment = AssignmentCreated(id=new_id, **assignment.dict())
-    mock_timetable.append(new_assignment)
-    return new_assignment
+@router.post("/api/modules", response_model=List[AssignmentCreated])
+def fetch_module(assignment: ModuleRequest):
+    mod = assignment.module_code.upper()
+    fetched_assignments = database.get(mod, [])
+    return fetched_assignments
 
 # mock data for testing purposes
-mock_timetable = [
-    AssignmentCreated(id=1, module="CS1010A", assignment_name="Mission 3", deadline="2026-10-01"),
-    AssignmentCreated(id=2, module="MA1522", assignment_name="Tutorial 4", deadline="2026-10-05")]
+database = {
+    "CS1010A": [
+        AssignmentCreated(id=1, module="CS1010A", assignment_name="Mission 1", deadline="W3"),
+        AssignmentCreated(id=2, module="CS1010A", assignment_name="Mission 2", deadline="W4"),
+        AssignmentCreated(id=3, module="CS1010A", assignment_name="Final Project", deadline="W13")
+    ],
+    "MA1522": [
+        AssignmentCreated(id=4, module="MA1522", assignment_name="Tutorial 1", deadline="W3"),
+        AssignmentCreated(id=5, module="MA1522", assignment_name="Quiz 1", deadline="W3")
+    ]
+}
