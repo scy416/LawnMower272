@@ -14,11 +14,11 @@ git pull origin main
 ## Testing
 ### 1. Run the backend
 cd "backend"
-uvicorn app.test:app --reload 
+uvicorn app.main:app --reload 
 add a /docs behind the local host link to test directly
 
 ### 2. Run the front end
-Make sure in root folder
+open a **new** terminal (make sure other terminal is still running the backend)
 cd "frontend"
 npm run dev
 
