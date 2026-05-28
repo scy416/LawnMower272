@@ -2,7 +2,7 @@ import "./dashboard.css";
 
 export default function dashboard() {
     return(
-        <div>
+        <div className="text">
             Wassup fam
         </div>
     )
