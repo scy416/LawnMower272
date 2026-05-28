@@ -9,7 +9,7 @@ web = fastapi.FastAPI() # create an instance of the FastAPI class
 
 web.add_middleware(
     fastapi.middleware.cors.CORSMiddleware,
-    allow_origins=["*"], #to be replaced by the actual url later on 
+    allow_origins=["http://localhost:5173"], #to be replaced by the actual url later on 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
