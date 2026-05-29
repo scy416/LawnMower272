@@ -27,6 +27,12 @@ def fetch_module(assignment: ModuleRequest):
     fetched_assignments = database.get(mod, [])
     return fetched_assignments
 
+# endpoint to delete/remove a module
+@router.delete("/api/modules/{module_code}")
+def remove_module(module_code: str):
+    return {"status": "success", "message": f"Module {module_code.upper()} removed"}
+
+
 # mock data for testing purposes
 database = {
     "CS1010A": [

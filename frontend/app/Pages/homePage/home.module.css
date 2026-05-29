@@ -1,0 +1,127 @@
+:root {
+  --bg: #f8fafc;              /* clean light page background */
+  --surface: #ffffff;         /* white surface for cards/buttons */
+  --border: rgba(15, 23, 42, 0.08); /* clean slate border */
+  --text: #0f172a;            /* deep slate navy text */
+  --muted: #64748b;           /* slate grey for taglines */
+  --accent: #0b2d5a;          /* poster deep navy brand color */
+  --accent-dark: #1b3d6c;     /* lighter navy hover brand color */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.home {
+  min-height: 100svh;
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f1f5f9 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+}
+
+.center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(11, 45, 90, 0.2);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.logo {
+  font-size: clamp(56px, 10vw, 100px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.dot {
+  color: var(--accent-dark);
+}
+
+.tagline {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 400;
+  max-width: 500px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(11, 45, 90, 0.2);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(11, 45, 90, 0.02);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.footer {
+  position: absolute;
+  bottom: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  z-index: 2;
+  letter-spacing: 0.05em;
+}
