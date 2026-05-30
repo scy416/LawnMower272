@@ -209,4 +209,25 @@
   text-align: left;
   line-height: 1.3;
   white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(11, 45, 90, 0.03);
+}
+
+/* PLACEHOLDER CODE FOR MILESTONE 1 SUBMISSION */
+.social-btn {
+  background: #ffffff;
+  color: #0b2d5a;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-btn:hover {
+  background: #f1f5f9;
+  border-color: #0b2d5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(11, 45, 90, 0.05);
 }
