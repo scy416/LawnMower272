@@ -1,30 +1,24 @@
 from pydantic import BaseModel, EmailStr
 
-# --- Request schemas (what the client sends) ---
-
 class UserCreate(BaseModel):
     username: str
-    email: EmailStr       # validates it's a proper email format
-    password: str         # plain text — will be hashed before storing
+    email: EmailStr
+    password: str
 
 class UserLogin(BaseModel):
     email: EmailStr
-    password: str         # plain text — will be verified against stored hash
-
-# --- Response schemas (what the server returns) ---
+    password: str
 
 class UserResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
-    # hashed_password is intentionally excluded — never expose it
-
     class Config:
-        from_attributes = True  # allows Pydantic to read SQLAlchemy model fields
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
-    token_type: str = "bearer"  # standard JWT response format
+    token_type: str = "bearer"
 
 class TokenData(BaseModel):
-    user_id: int | None = None  # decoded from the JWT payload (the "sub" field)
+    user_id: int | None = None

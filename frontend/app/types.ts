@@ -1,1 +1,6 @@
-//Put all different types/classes here
+export interface Assignment {
+  id: number;
+  module: string;
+  assignment_name: string;
+  deadline: string;
+}

@@ -1,4 +1,3 @@
-#to test the app/debug
 from app.auth.router import router as auth_router
 from app.timetable import router as timetable_router
 from fastapi import FastAPI

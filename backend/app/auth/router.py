@@ -14,7 +14,6 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
-    # check if email is already registered
     existing_email = db.query(User).filter(User.email == user_in.email).first()
     if existing_email:
         raise HTTPException(
@@ -22,7 +21,6 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
             detail="Email is already registered"
         )
 
-    # check if username is already taken
     existing_username = db.query(User).filter(User.username == user_in.username).first()
     if existing_username:
         raise HTTPException(
@@ -30,38 +28,35 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
             detail="Username is already taken"
         )
 
-    # hash the plain password before storing
     hashed_password = get_password_hash(user_in.password)
 
-    # create the new User ORM object and write it to the DB
     new_user = User(
         username=user_in.username,
         email=user_in.email,
         hashed_password=hashed_password
     )
     db.add(new_user)
-    db.commit()          # writes to the database
-    db.refresh(new_user) # loads the generated id and any DB defaults back into new_user
+    db.commit()
+    db.refresh(new_user)
 
-    return new_user  # Pydantic maps this to UserResponse (no password exposed)
+    return new_user
 
 
 @router.post("/login", response_model=Token)
 def login(user_in: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == user_in.email).first() # look up the user by email
-    if not user: #check whether email exists
+    user = db.query(User).filter(User.email == user_in.email).first()
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"  # deliberately vague for security
+            detail="Invalid email or password"
         )
 
-    if not verify_password(user_in.password, user.hashed_password): #check whether password is correct
+    if not verify_password(user_in.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
     )
 
-    # create JWT — subject is the user's id (stored as "sub" in the payload)
     access_token = create_access_token(
         subject=user.id,
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
