@@ -23,12 +23,15 @@ type Pages = {
   "/Timetable": {
     params: {};
   };
+  "/Social": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/Login" | "/SignUp" | "/Timetable";
+    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social";
   };
   "Pages/homePage/home.tsx": {
     id: "Pages/homePage/home";
@@ -46,6 +49,10 @@ type RouteFiles = {
     id: "Pages/timetable/timetable";
     page: "/Timetable";
   };
+  "Pages/social/social.tsx": {
+    id: "Pages/social/social";
+    page: "/Social";
+  };
 };
 
 type RouteModules = {
@@ -54,4 +61,5 @@ type RouteModules = {
   "Pages/login/login": typeof import("./app/Pages/login/login.tsx");
   "Pages/signUp/signUp": typeof import("./app/Pages/signUp/signUp.tsx");
   "Pages/timetable/timetable": typeof import("./app/Pages/timetable/timetable.tsx");
+  "Pages/social/social": typeof import("./app/Pages/social/social.tsx");
 };

@@ -124,9 +124,14 @@ function Timetable() {
           <div className={styles['topbar-title']}>
             SyllaBuddy
           </div>
-          <button className={styles['logout-btn']} onClick={handleLogout}>
+          <div style={{gap: '12px' ,display: 'flex'}}>
+            <button className={styles['social-btn']} onClick={() => navigate("/social")}>
+            Social
+            </button>
+            <button className={styles['logout-btn']} onClick={handleLogout}>
             Sign out
-          </button>
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className={styles['module-form']}>

@@ -73,3 +73,5 @@ alembic history             # list all migrations
 ## misc info
 Test user
 username: test123, email: 123@gmail.com, password: 123
+
+username: testuser2, email: testuser2@gmail.com, password: 123
