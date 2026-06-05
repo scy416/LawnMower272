@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.database.database import get_db
 from app.database.models import User
-from app.auth.schemas import UserCreate, UserLogin, UserResponse, Token
+from app.auth.authClasses import UserCreate, UserLogin, UserResponse, Token
 from app.auth.security import get_password_hash, verify_password, create_access_token
 from app.config import settings
 

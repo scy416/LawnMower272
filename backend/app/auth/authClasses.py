@@ -1,18 +1,18 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 class UserCreate(BaseModel):
     username: str
-    email: EmailStr
+    email: EmailStr | None = Field(default=None)
     password: str
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: EmailStr | None = Field(default=None)
     password: str
 
 class UserResponse(BaseModel):
     id: int
     username: str
-    email: EmailStr
+    email: EmailStr 
     class Config:
         from_attributes = True
 
