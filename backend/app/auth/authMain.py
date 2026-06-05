@@ -7,6 +7,7 @@ from app.database.database import get_db
 from app.database.models import User
 from app.auth.authClasses import UserCreate, UserLogin, UserResponse, Token
 from app.auth.security import get_password_hash, verify_password, create_access_token
+from app.auth import exceptions
 from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -16,17 +17,11 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
     existing_email = db.query(User).filter(User.email == user_in.email).first()
     if existing_email:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email is already registered"
-        )
+        raise exceptions.EmailRepeatedException()
 
     existing_username = db.query(User).filter(User.username == user_in.username).first()
     if existing_username:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username is already taken"
-        )
+        raise exceptions.UsernameRepeatedException()
 
     hashed_password = get_password_hash(user_in.password)
 
@@ -45,17 +40,8 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(user_in: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user_in.email).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
-        )
-
-    if not verify_password(user_in.password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
-    )
+    if not user or not verify_password(user_in.password, user.hashed_password):
+        raise exceptions.InvalidLoginException()
 
     access_token = create_access_token(
         subject=user.id,
