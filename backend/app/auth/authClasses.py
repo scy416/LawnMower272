@@ -2,11 +2,11 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserCreate(BaseModel):
     username: str
-    email: EmailStr | None = Field(default=None)
+    email: EmailStr 
     password: str
 
 class UserLogin(BaseModel):
-    email: EmailStr | None = Field(default=None)
+    email: EmailStr 
     password: str
 
 class UserResponse(BaseModel):

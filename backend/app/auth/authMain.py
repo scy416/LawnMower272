@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
-from app.database.models import User
+from app.database.models import User, UserProfile
 from app.auth.authClasses import UserCreate, UserLogin, UserResponse, Token
 from app.auth.security import get_password_hash, verify_password, create_access_token
 from app.auth import exceptions
@@ -30,7 +30,12 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         email=user_in.email,
         hashed_password=hashed_password
     )
+
     db.add(new_user)
+    db.flush()
+    new_user_profile = UserProfile(user_id = new_user.id)
+    db.add(new_user_profile)
+    
     db.commit()
     db.refresh(new_user)
 
