@@ -4,7 +4,7 @@ import styles from "../signUp/signUp.module.css";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,10 +14,14 @@ export default function Login() {
     setLoading(true);
 
     try {
+      const formData = new URLSearchParams();
+      formData.append("username", emailOrUsername); 
+      formData.append("password", password);
+
       const res = await fetch("http://localhost:8000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData,
       });
 
       const data = await res.json();
@@ -49,13 +53,13 @@ export default function Login() {
 
           <div className={styles['auth-fields']}>
             <div className={styles.field}>
-              <label className={styles['field-label']}>Email</label>
+              <label className={styles['field-label']}>Email/Username</label>
               <input
                 className={styles['field-input']}
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                type="text"
+                placeholder="enter your email or username"
+                value={emailOrUsername}
+                onChange={e => setEmailOrUsername(e.target.value)}
               />
             </div>
 

@@ -10,12 +10,9 @@ from app.database.models import User
 from app.auth.authClasses import TokenData
 from app.config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+get_token = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
-) -> User:
+def get_current_user(token: str = Depends(get_token), db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
