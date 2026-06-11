@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import styles from "../signUp/signUp.module.css";
+import styles from "./signUp.module.css";
 
 export default function Login() {
   const navigate = useNavigate();

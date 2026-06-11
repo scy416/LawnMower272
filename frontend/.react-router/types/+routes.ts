@@ -26,23 +26,26 @@ type Pages = {
   "/Social": {
     params: {};
   };
+  "/Profile": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social";
+    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social" | "/Profile";
   };
   "Pages/homePage/home.tsx": {
     id: "Pages/homePage/home";
     page: "/";
   };
-  "Pages/login/login.tsx": {
-    id: "Pages/login/login";
+  "Pages/auth/login.tsx": {
+    id: "Pages/auth/login";
     page: "/Login";
   };
-  "Pages/signUp/signUp.tsx": {
-    id: "Pages/signUp/signUp";
+  "Pages/auth/signUp.tsx": {
+    id: "Pages/auth/signUp";
     page: "/SignUp";
   };
   "Pages/timetable/timetable.tsx": {
@@ -53,13 +56,18 @@ type RouteFiles = {
     id: "Pages/social/social";
     page: "/Social";
   };
+  "Pages/userProfile/userProfile.tsx": {
+    id: "Pages/userProfile/userProfile";
+    page: "/Profile";
+  };
 };
 
 type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "Pages/homePage/home": typeof import("./app/Pages/homePage/home.tsx");
-  "Pages/login/login": typeof import("./app/Pages/login/login.tsx");
-  "Pages/signUp/signUp": typeof import("./app/Pages/signUp/signUp.tsx");
+  "Pages/auth/login": typeof import("./app/Pages/auth/login.tsx");
+  "Pages/auth/signUp": typeof import("./app/Pages/auth/signUp.tsx");
   "Pages/timetable/timetable": typeof import("./app/Pages/timetable/timetable.tsx");
   "Pages/social/social": typeof import("./app/Pages/social/social.tsx");
+  "Pages/userProfile/userProfile": typeof import("./app/Pages/userProfile/userProfile.tsx");
 };
