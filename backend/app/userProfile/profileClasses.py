@@ -3,9 +3,9 @@ from typing import Optional
 
 #update classes
 class ProfileUpdate(BaseModel):
-    major: Optional[str]
-    year: Optional[int]
-    bio: Optional[str]
+    major: Optional[str] = None
+    year: Optional[int] = None
+    bio: Optional[str] = None
 
 #getter classes
 class UserProfileBase(BaseModel):

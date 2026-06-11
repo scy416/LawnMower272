@@ -1,30 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import styles from "./userProfile.module.css";
-import { type Profile } from "../../types";
-import { userAuth } from "../../userAuth"
+import { getProfile } from "../../hooks"
 
 export default function UserProfile() {
-    const navigate = useNavigate();
-    const [profile, setProfile] = useState<Profile | null>(null);
-
-    const { getToken, handleUnauthorized } = userAuth();
-
-    const loadProfileInfo = async(): Promise<void> => {
-        const token = getToken();
-        if (!token) return;
-
-        const res = await fetch("http://localhost:8000/profile/me", {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.status === 401) {
-            handleUnauthorized();
-            return;
-        }
-
-        const data = await res.json();
-        setProfile(data);
-        };
+    const navigate = useNavigate()
+    const { profile, loadProfileInfo } = getProfile()
 
     useEffect(() => {
         loadProfileInfo();

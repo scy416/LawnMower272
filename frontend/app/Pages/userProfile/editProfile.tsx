@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import InputBox  from "../../Components/InputBox"
 import styles from "./editProfile.module.css"
-import { userAuth } from "~/userAuth";
+import { userAuth } from "~/hooks";
+import { getProfile } from "../../hooks"
 
 export default function EditProfile() {
     const navigate = useNavigate()
@@ -11,10 +12,29 @@ export default function EditProfile() {
     const [year, setYear] = useState("")
 
     const { getToken } = userAuth()
+    const { loadProfileInfo } = getProfile()
+
+    const setInitialData = async() => {
+        const data = await loadProfileInfo();
+        if (data){
+            setBio(data.bio || "")
+            setMajor(data.major || "")
+            setYear(data.year || "")
+        }
+    }
+
+    useEffect(() => {
+        setInitialData();
+    })
 
     const updateProfile = async() => {
         const token = getToken();
         if (!token) return;
+        
+        const updatedFields: Record<string, string | number> = {};
+        if (bio) updatedFields.bio = bio;
+        if (major) updatedFields.major = major;
+        if (year) updatedFields.year = year;
 
         const res = await fetch("http://localhost:8000/profile/me", {
             method: "PATCH",
@@ -22,7 +42,7 @@ export default function EditProfile() {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({ bio, major, year: parseInt(year) })
+            body: JSON.stringify(updatedFields)
         });
 
         if (res.ok) {
