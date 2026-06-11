@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import styles from "./userProfile.module.css";
 import { type Profile } from "../../types";
 import { userAuth } from "../../userAuth"
