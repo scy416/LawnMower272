@@ -16,8 +16,7 @@ class User(Base):
 class UserProfile(Base):
     __tablename__ = 'user_profiles'
 
-    id = Column(Integer,  primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), unique = True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
 
     major = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
@@ -26,16 +25,16 @@ class UserProfile(Base):
     user = relationship("User", back_populates = "profile")
     
     friends = relationship('UserProfile', secondary='friends', 
-        primaryjoin = "UserProfile.id == friends_table.c.profile_id",
-        secondaryjoin = "UserProfile.id == friends_table.c.friend_profile_id"
-        )
+        primaryjoin = "UserProfile.user_id == friends_table.c.profile_id",
+        secondaryjoin = "UserProfile.user_id == friends_table.c.friend_profile_id"
+    )
     #courses = Column(Integer) #NEEDS A RELATIONSHIP, CREATE LATER
 
 friends_table = Table(
     'friends',
     Base.metadata,
-    Column('profile_id', Integer, ForeignKey(UserProfile.id, ondelete='CASCADE'), primary_key=True),
-    Column('friend_profile_id',Integer, ForeignKey(UserProfile.id, ondelete='CASCADE'), primary_key=True)
+    Column('profile_id', Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), primary_key=True),
+    Column('friend_profile_id',Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), primary_key=True)
 )
 
 class UserModule(Base):
@@ -44,3 +43,12 @@ class UserModule(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     module_code = Column(String, nullable=False, index=True)
+
+class FriendRequest(Base):
+    __tablename__ = 'friend_requests'
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False)
+    receiver_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False)
+
+    status = Column(String, default = "pending", nullable=False)

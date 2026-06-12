@@ -19,10 +19,3 @@ class ProfileResponse(UserProfileBase):
     major: Optional[str]
     year: Optional[int]
     bio: Optional[str]
-
-class FriendResponse(BaseModel):
-    id: int
-    username: str
-
-    class Config:
-        from_attributes = True

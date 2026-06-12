@@ -5,7 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from app.auth.authMain import router as auth_router
 from app.timetable import router as timetable_router
 from app.userProfile.profileMain import router as profile_router
-from app.auth.exceptions import invalid_email_format
+from app.auth.aExceptions import invalid_email_format
 
 app = FastAPI()
 
