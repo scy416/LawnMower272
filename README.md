@@ -71,7 +71,8 @@ alembic current             # show which migration your DB is on
 alembic history             # list all migrations
 
 ## misc info
-Test user
-username: test123, email: 123@gmail.com, password: 123
+Test users
 
-username: testuser2, email: testuser2@gmail.com, password: 123
+testuser1, testuser1@gmail.com, 123
+
+Michael, Michael@gmail.com 123

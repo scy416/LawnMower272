@@ -4,6 +4,7 @@ from typing import List
 
 from app.database.database import get_db
 from app.auth.dependencies import get_current_user
+from app.database.models import User
 from app.userProfile.friends.friendsClasses import FriendResponse 
 
 router = APIRouter(prefix="/friends", tags =["friends"])

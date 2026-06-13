@@ -9,7 +9,7 @@ from app.database.database import get_db
 from app.database.models import User, UserProfile
 from app.auth.authClasses import UserCreate, UserResponse, Token
 from app.auth.security import get_password_hash, verify_password, create_access_token
-from app.auth import exceptions
+from app.auth import aExceptions
 from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])

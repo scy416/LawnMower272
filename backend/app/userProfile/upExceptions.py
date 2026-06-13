@@ -1,4 +1,5 @@
-from fastapi import HTTPException, status, Request, Session
+from fastapi import HTTPException, status, Request
+from sqlalchemy.orm import Session
 from app.database.models import User, UserProfile, FriendRequest
 
 def sendRequestExceptions(receiver_id:int, current_user: User, db: Session):
@@ -11,6 +12,9 @@ def sendRequestExceptions(receiver_id:int, current_user: User, db: Session):
     if receiver_profile in current_user.profile.friends:
         raise HTTPException(status_code=400, detail="Already added as friends")
     
+    if not receiver_profile:
+        raise HTTPException(status_code=404, detail="User not found")
+
     existing_request = db.query(FriendRequest).filter(
         ((FriendRequest.sender_id == sender_id) & (FriendRequest.receiver_id == receiver_id)) |
         ((FriendRequest.sender_id == receiver_id) & (FriendRequest.receiver_id == sender_id)),
@@ -18,7 +22,7 @@ def sendRequestExceptions(receiver_id:int, current_user: User, db: Session):
     ).first()
 
     if existing_request:
-        raise HTTPException(status_code=400, detail="A pending request already exists between you two.")
+        raise HTTPException(status_code=400, detail="Existing pending request")
 
 def acceptRequestExceptions(request: FriendRequest, current_user: User):
     if not request:

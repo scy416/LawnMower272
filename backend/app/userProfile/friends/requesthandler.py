@@ -26,7 +26,7 @@ def accept_friend_request(request_id: int, current_user: User = Depends(get_curr
     
     acceptRequestExceptions(friend_request, current_user)
 
-    sender_profile = db.query(UserProfile).filter(UserProfile.user.id == friend_request.sender_id).first()
+    sender_profile = db.query(UserProfile).filter(UserProfile.user_id == friend_request.sender_id).first()
     receiver_profile = current_user.profile
 
     sender_profile.friends.append(receiver_profile)
