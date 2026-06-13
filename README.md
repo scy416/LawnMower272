@@ -15,7 +15,7 @@ git pull origin main
 ### 1. Run the backend
 cd "backend"
 uvicorn app.main:app --reload 
-add a /docs behind the local host link to test directly
+add a /docs behind the local host link to access swagger and test directly
 
 ### 2. Run the front end
 open a **new** terminal (make sure other terminal is still running the backend)
@@ -28,6 +28,7 @@ password: 123
 
 ### 4. Navigate homescreen
 you should be in the timetable screen
+
 ## Relevant installations
 ### 1. install python dependencies
 cd "backend"
