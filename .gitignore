@@ -2,3 +2,4 @@
 .DS_Store
 shortcuts.md
 __pycache__/
+node_modules

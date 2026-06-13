@@ -6,6 +6,6 @@ export default [
     route("SignUp", "Pages/auth/signUp.tsx"),
     route("Timetable", "Pages/timetable/timetable.tsx"),
     route("Social", "Pages/social/social.tsx"),
-    route("Profile", "Pages/userProfile/userProfile.tsx" ),
+    route("Profile", "Pages/userProfile/mainProfile.tsx" ),
     route("Profile/edit", "Pages/userProfile/editProfile.tsx")
 ] satisfies RouteConfig;

@@ -12,3 +12,10 @@ export interface Profile {
   year: number | null;
   bio: string | null;
 }
+
+export interface Friend {
+    id: number;
+    username: string;
+    major?: string;
+    mutualFriends?: number;
+}

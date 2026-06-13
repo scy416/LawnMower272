@@ -47,8 +47,7 @@ class FriendRequest(Base):
     __tablename__ = 'friend_requests'
 
     id = Column(Integer, primary_key=True, index=True)
-    sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False) #,index=True
-    receiver_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False) #,index=True 
-    # Index = True helps speeds up queries. Will implement in future where scalability is a concern (I dont want to crash the whole database again..)
+    sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
+    receiver_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
 
     status = Column(String, default = "pending", nullable=False)

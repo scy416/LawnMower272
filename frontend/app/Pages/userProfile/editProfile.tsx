@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import InputBox  from "../../Components/InputBox"
+import InputBox  from "../../Components/inputBox";
 import styles from "./editProfile.module.css"
-import { userAuth } from "~/hooks";
-import { getProfile } from "../../hooks"
+import { userAuth, getProfile } from "~/hooks";
 
 export default function EditProfile() {
     const navigate = useNavigate()
@@ -25,7 +24,7 @@ export default function EditProfile() {
 
     useEffect(() => {
         setInitialData();
-    })
+    },[])
 
     const updateProfile = async() => {
         const token = getToken();

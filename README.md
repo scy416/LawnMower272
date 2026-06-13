@@ -73,6 +73,8 @@ alembic history             # list all migrations
 ## misc info
 Test users
 
-testuser1, testuser1@gmail.com, 123
+testuser1, testuser1@gmail.com, 123 (id:1)
 
-Michael, Michael@gmail.com 123
+Michael, Michael@gmail.com 123 (id:2)
+
+john, john@example.com 123 (id:3)

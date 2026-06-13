@@ -59,8 +59,8 @@ type RouteFiles = {
     id: "Pages/social/social";
     page: "/Social";
   };
-  "Pages/userProfile/userProfile.tsx": {
-    id: "Pages/userProfile/userProfile";
+  "Pages/userProfile/mainProfile.tsx": {
+    id: "Pages/userProfile/mainProfile";
     page: "/Profile";
   };
   "Pages/userProfile/editProfile.tsx": {
@@ -76,6 +76,6 @@ type RouteModules = {
   "Pages/auth/signUp": typeof import("./app/Pages/auth/signUp.tsx");
   "Pages/timetable/timetable": typeof import("./app/Pages/timetable/timetable.tsx");
   "Pages/social/social": typeof import("./app/Pages/social/social.tsx");
-  "Pages/userProfile/userProfile": typeof import("./app/Pages/userProfile/userProfile.tsx");
+  "Pages/userProfile/mainProfile": typeof import("./app/Pages/userProfile/mainProfile.tsx");
   "Pages/userProfile/editProfile": typeof import("./app/Pages/userProfile/editProfile.tsx");
 };
