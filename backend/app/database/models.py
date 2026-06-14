@@ -49,5 +49,22 @@ class FriendRequest(Base):
     id = Column(Integer, primary_key=True, index=True)
     sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
     receiver_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
-
     status = Column(String, default = "pending", nullable=False)
+
+class Conversation(Base):
+    __tablename__ = 'conversations'
+
+    id = Column(Integer, primary_key=True, index=True)
+    initiator_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete=CASCADE), nullable=False, index=True)
+    acceptor_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete=CASCADE), nullable=False, index=True)
+    status = Column(String, default="pending", nullable=False)
+
+#Work on scalability features for messages table in future
+class Messages(Base):
+    __tablename__ = 'messages'
+
+    id = Column(Integer, primary_key=True, index=True)
+    conversation_id = Column(Integer, ForeignKey('conversations.id',ondelete=CASCADE), nullable=False, index=True)
+    sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete=CASCADE), nullable=False, index=True)
+    message = Column(String, nullable=False)
+    time_sent = Column(Integer, nullable=False)

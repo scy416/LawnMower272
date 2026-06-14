@@ -10,6 +10,11 @@ from app.userProfile.upExceptions import deleteFriendExceptions
 
 router = APIRouter(prefix="/friends", tags =["friends"])
 
+def is_friend(user: User, other_id: int):
+    other_profile = db.query(UserProfile).filter(UserProfile.user_id == other_id).first()
+    user_profile = user.profile
+    return other_profile in user_profile.friends
+
 @router.get("/friends_list", response_model = List[FriendResponse], status_code=status.HTTP_200_OK)
 def get_friends(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     friend_profiles = current_user.profile.friends

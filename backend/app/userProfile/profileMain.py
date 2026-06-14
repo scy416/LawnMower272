@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 
 from app.database.models import User, UserProfile
 from app.database.database import get_db
+from app.auth.dependencies import get_current_user
 from app.userProfile.profileClasses import ProfileResponse, ProfileUpdate
 from app.userProfile.utils import build_profile_response
-from app.auth.dependencies import get_current_user
 
 router = APIRouter(prefix="/profile", tags = ["profile"])
 
