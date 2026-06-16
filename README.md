@@ -15,7 +15,7 @@ git pull origin main
 ### 1. Run the backend
 cd "backend"
 uvicorn app.main:app --reload 
-add a /docs behind the local host link to test directly
+add a /docs behind the local host link to access swagger and test directly
 
 ### 2. Run the front end
 open a **new** terminal (make sure other terminal is still running the backend)
@@ -28,6 +28,7 @@ password: 123
 
 ### 4. Navigate homescreen
 you should be in the timetable screen
+
 ## Relevant installations
 ### 1. install python dependencies
 cd "backend"
@@ -71,7 +72,10 @@ alembic current             # show which migration your DB is on
 alembic history             # list all migrations
 
 ## misc info
-Test user
-username: test123, email: 123@gmail.com, password: 123
+Test users
 
-username: testuser2, email: testuser2@gmail.com, password: 123
+testuser1, testuser1@gmail.com, 123 (id:1)
+
+Michael, Michael@gmail.com 123 (id:2)
+
+john, john@example.com 123 (id:3) (wadafuq doesnt work)

@@ -1,0 +1,34 @@
+.container {
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+}
+
+.tab {
+  padding: 12px 0;
+  margin-right: 32px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: #0f172a;
+}
+
+.active {
+  border-bottom-color: #0b2d5a;
+  color: #0b2d5a;
+}
+
+.badge {
+  background: #0b2d5a;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 6px;
+}

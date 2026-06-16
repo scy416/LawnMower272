@@ -1,13 +1,15 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from email_validator import validate_email, EmailNotValidError
 
 from app.database.database import get_db
-from app.database.models import User
-from app.auth.authClasses import UserCreate, UserLogin, UserResponse, Token
+from app.database.models import User, UserProfile
+from app.auth.authClasses import UserCreate, UserResponse, Token
 from app.auth.security import get_password_hash, verify_password, create_access_token
-from app.auth import exceptions
+from app.auth import aExceptions
 from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -30,7 +32,12 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         email=user_in.email,
         hashed_password=hashed_password
     )
+
     db.add(new_user)
+    db.flush()
+    new_user_profile = UserProfile(user_id = new_user.id)
+    db.add(new_user_profile)
+
     db.commit()
     db.refresh(new_user)
 
@@ -38,10 +45,15 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(user_in: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == user_in.email).first()
-    if not user or not verify_password(user_in.password, user.hashed_password):
-        raise exceptions.InvalidLoginException()
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    try:
+        validate_email(form_data.username)
+        user = db.query(User).filter(User.email == form_data.username).first()
+    except EmailNotValidError:
+        user = db.query(User).filter(User.username == form_data.username).first()
+
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise aExceptions.InvalidLoginException()
 
     access_token = create_access_token(
         subject=user.id,

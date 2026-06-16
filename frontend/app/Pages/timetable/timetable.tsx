@@ -128,6 +128,12 @@ function Timetable() {
             <button className={styles['social-btn']} onClick={() => navigate("/social")}>
             Social
             </button>
+            <button className={styles['social-btn']} onClick={() => navigate("/profile")}>
+            Profile 
+            </button>
+            <button className={styles['social-btn']} onClick={() => navigate("/inbox")}>
+            Inbox
+            </button>
             <button className={styles['logout-btn']} onClick={handleLogout}>
             Sign out
             </button>
