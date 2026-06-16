@@ -19,7 +19,21 @@ def get_inbox(current_user: User = Depends(get_current_user),db: Session = Depen
         )
     ).all()
 
-    return chats
+    inbox_data = []
+    for chat in chats:
+        other_user_id = chat.acceptor_id if chat.initiator_id == current_user.id else chat.initiator_id
+        other_profile = db.query(UserProfile).filter(UserProfile.user_id == other_user_id).first()
+        other_name = other_profile.user.username if other_profile and other_profile.user else "Unknown User"
+
+        inbox_data.append({
+            "conversation_id": chat.id,
+            "status": chat.status,
+            "other_user_id": other_user_id,
+            "other_user_name": other_name,
+            "is_initiator": chat.initiator_id == current_user.id
+        })
+
+    return inbox_data
 
 @router.get("/chat/{convo_id}", response_model=list[MessageResponse])
 def get_chat_history(convo_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

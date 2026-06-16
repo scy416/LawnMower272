@@ -1,4 +1,5 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes"; 
+import Social from "./Pages/social/social";
 
 export default [
     index("Pages/homePage/home.tsx"),
@@ -7,5 +8,7 @@ export default [
     route("Timetable", "Pages/timetable/timetable.tsx"),
     route("Social", "Pages/social/social.tsx"),
     route("Profile", "Pages/userProfile/mainProfile.tsx" ),
-    route("Profile/edit", "Pages/userProfile/editProfile.tsx")
+    route("Profile/edit", "Pages/userProfile/editProfile.tsx"),
+    route("chat/:conversationId", "Pages/social/chat/chatRoom.tsx"),
+    route("inbox", "Pages/social/inbox.tsx")
 ] satisfies RouteConfig;

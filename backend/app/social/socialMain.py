@@ -55,3 +55,19 @@ def reject_conversation_request(conversation_id: int, current_user: User = Depen
     db.commit()
 
     return {"message": "rejected"}
+
+def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    other_profiles = db.query(UserProfile).filter(UserProfile.user_id != current_user.id).all()
+
+    results = []
+    for profile in other_profiles:
+        results.append({
+            "id": profile.user_id,
+            "name": profile.user.username,  
+            "year": profile.year or 3,      
+            "major": profile.major or "Undeclared",
+            "bio": profile.bio or "No bio provided.",
+            "modules": ["m1", "m2"] 
+        })
+
+    return results
