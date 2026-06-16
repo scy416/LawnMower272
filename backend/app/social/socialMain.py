@@ -70,7 +70,7 @@ def reject_conversation_request(conversation_id: int, current_user: User = Depen
 
     return {"message": "rejected"}
 
-@router.get("/discover")
+@router.get("/discover") #currently my "algorithm" for social interface :P
 def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     other_profiles = db.query(UserProfile).filter(UserProfile.user_id != current_user.id).all()
 
