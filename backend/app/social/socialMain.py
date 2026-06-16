@@ -24,17 +24,31 @@ def make_or_get_conversation(target_user_id: int, current_user: User = Depends(g
     ).first()
 
     if existing_conv:
-        return {"conversation_id": existing_conv.id, "status": existing_conv.status}
+        return {
+            "conversation_id": existing_conv.id, 
+            "status": existing_conv.status,
+            "initiator_id": existing_conv.initiator_id,
+            "acceptor_id": existing_conv.acceptor_id
+        }
 
     initial_status = "accepted" if is_friend(current_user, target_user_id, db) else "pending"
 
-    new_conversation = Conversation(initiator_id=current_user.id, acceptor_id=target_user_id, status = initial_status)
+    new_conversation = Conversation(
+        initiator_id=current_user.id, 
+        acceptor_id=target_user_id, 
+        status=initial_status
+    )
 
     db.add(new_conversation)
     db.commit()
     db.refresh(new_conversation)
 
-    return {"conversation_id": new_conversation.id, "status": new_conversation.status}
+    return {
+        "conversation_id": new_conversation.id, 
+        "status": new_conversation.status,
+        "initiator_id": new_conversation.initiator_id,
+        "acceptor_id": new_conversation.acceptor_id
+    }
 
 @router.patch("/accept_chat/{conversation_id}")
 def accept_conversation_request(conversation_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -56,6 +70,7 @@ def reject_conversation_request(conversation_id: int, current_user: User = Depen
 
     return {"message": "rejected"}
 
+@router.get("/discover")
 def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     other_profiles = db.query(UserProfile).filter(UserProfile.user_id != current_user.id).all()
 

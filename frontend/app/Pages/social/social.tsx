@@ -4,7 +4,7 @@ import styles from "./social.module.css";
 import SearchBar from "./searchBar";
 import NavigationTabs from "./navTab";
 import SeniorCard from "../../Components/seniorCard";
-import { userAuth } from "~/hooks";
+import { userAuth } from "../../hooks";
 
 export default function Social() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export default function Social() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedModule, setSelectedModule] = useState("All");
   const [activeTab, setActiveTab] = useState<"discover" | "connected">("discover");
- const { getToken } = userAuth()
+  const { getToken } = userAuth()
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");

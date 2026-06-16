@@ -1,4 +1,4 @@
-import styles from "./navigationTabs.module.css";
+import styles from "./navTab.module.css";
 
 interface NavigationTabsProps {
   activeTab: "discover" | "connected";

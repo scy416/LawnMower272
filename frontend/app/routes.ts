@@ -9,6 +9,6 @@ export default [
     route("Social", "Pages/social/social.tsx"),
     route("Profile", "Pages/userProfile/mainProfile.tsx" ),
     route("Profile/edit", "Pages/userProfile/editProfile.tsx"),
-    route("chat/:conversationId", "Pages/social/chat/chatRoom.tsx"),
-    route("inbox", "Pages/social/inbox.tsx")
+    route("Chat/:conversationId", "Pages/social/chat/chatRoom.tsx"),
+    route("Inbox", "Pages/social/chat/inbox.tsx")
 ] satisfies RouteConfig;
