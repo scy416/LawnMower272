@@ -10,8 +10,12 @@ from app.userProfile.upExceptions import deleteFriendExceptions
 
 router = APIRouter(prefix="/friends", tags =["friends"])
 
-def is_friend(user: User, other_id: int):
+def is_friend(user: User, other_id: int, db: Session):
     other_profile = db.query(UserProfile).filter(UserProfile.user_id == other_id).first()
+
+    if not other_profile:
+        return False
+    
     user_profile = user.profile
     return other_profile in user_profile.friends
 

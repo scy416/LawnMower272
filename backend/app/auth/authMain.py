@@ -53,7 +53,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         user = db.query(User).filter(User.username == form_data.username).first()
 
     if not user or not verify_password(form_data.password, user.hashed_password):
-        raise exceptions.InvalidLoginException()
+        raise aExceptions.InvalidLoginException()
 
     access_token = create_access_token(
         subject=user.id,

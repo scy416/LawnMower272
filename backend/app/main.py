@@ -9,6 +9,8 @@ from app.timetable import router as timetable_router
 from app.userProfile.profileMain import router as profile_router
 from app.userProfile.friends.friendsMain import router as friends_router
 from app.userProfile.friends.requesthandler import router as friend_request_router
+from app.social.socialMain import router as social_router
+from app.social.inbox import router as inbox_router
 
 app = FastAPI()
 
@@ -28,3 +30,5 @@ app.include_router(timetable_router)
 app.include_router(profile_router)
 app.include_router(friends_router)
 app.include_router(friend_request_router)
+app.include_router(social_router)
+app.include_router(inbox_router)
