@@ -1,7 +1,7 @@
 import { useState, useEffect, type SyntheticEvent } from "react";
 import { useParams, useNavigate } from "react-router";
 import styles from "./chatRoom.module.css"; 
-import { userAuth } from "~/hooks";
+import { userAuth, getInbox } from "~/hooks";
 
 interface Message {
   id: number;
@@ -16,19 +16,12 @@ export default function ChatRoom() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState("");
     const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-    const { getToken } = userAuth()
+    const { getToken, getUserId } = userAuth();
+    const { conversations } = getInbox();
 
     useEffect(() => {
-        const token = getToken();
-        if (token) {
-            try {
-                const payload = JSON.parse(window.atob(token.split('.')[1]));
-                setCurrentUserId(parseInt(payload.sub, 10)); 
-            } catch (e) {
-                console.error("Failed to decode token", e);
-            }
-        }
-    }, [getToken]);
+        setCurrentUserId(getUserId());
+    }, []);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -53,8 +46,8 @@ export default function ChatRoom() {
         if (!inputText.trim() || currentUserId === null) return;
 
         const optimisticMsg: Message = {
-            id: Math.random(),
-            sender_id: currentUserId, 
+            id: -Date.now(),
+            sender_id: currentUserId,
             message: inputText,
             time_sent: new Date().toISOString()
         };
@@ -78,40 +71,76 @@ export default function ChatRoom() {
 
     return (
     <div className={styles["chat-page"]}>
-        <div className={styles["chat-container"]}>
-        <div className={styles["chat-header"]}>
-            <button onClick={() => navigate(-1)} className={styles["back-btn"]}>← Back</button>
-            <h2>Chat Room</h2>
-        </div>
-
-        <div className={styles["chat-messages"]}>
-            {messages.map((msg) => {
-                const isMe = msg.sender_id === currentUserId;
-                return (
-                    <div key={msg.id} className={`${styles["message-row"]} ${isMe ? styles["me"] : styles["them"]}`}>
-                    <div className={styles["message-bubble"]}>
-                        {msg.message}
-                    </div>
-                    </div>
-                );
-                }
-            )}
-        </div>
-
-        <div className={styles["chat-input-area"]}>
-            <form className={styles["chat-form"]} onSubmit={sendMessage}>
-            <input
-                type="text"
-                placeholder="Type a message..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                className={styles["chat-input"]}
-            />
-            <button type="submit" className={styles["chat-send-btn"]} disabled={!inputText.trim()}>
-                Send
+        <div className={styles["topbar"]}>
+            <div className={styles["topbar-title"]}>SyllaBuddy</div>
+            <button className={styles["home-btn"]} onClick={() => navigate("/timetable")}>
+                Home
             </button>
-            </form>
         </div>
+
+        <div className={styles["layout-container"]}>
+            <div className={styles["sidebar"]}>
+                <div className={styles["sidebar-header"]}>Inbox</div>
+                <div className={styles["sidebar-content"]}>
+                    {conversations.length > 0 ? (
+                        conversations.map((convo: any) => (
+                            <div
+                                key={convo.conversation_id}
+                                className={styles["inbox-item"]}
+                                onClick={() => navigate(`/chat/${convo.conversation_id}`)}
+                            >
+                                <div className={styles["sidebar-avatar"]}>
+                                    {convo.other_user_name.slice(0, 2).toUpperCase()}
+                                </div>
+                                <div className={styles["inbox-info"]}>
+                                    <div className={styles["inbox-name"]}>{convo.other_user_name}</div>
+                                </div>
+                                {convo.unread_count > 0 && (
+                                    <div className={styles["unread-badge"]}>
+                                        {convo.unread_count}
+                                    </div>
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <p style={{fontSize: "12px", color: "#94a3b8"}}>No conversations yet.</p>
+                    )}
+                </div>
+            </div>
+
+            <div className={styles["chat-container"]}>
+                <div className={styles["chat-header"]}>
+                    <h2>Chat Room</h2>
+                </div>
+
+                <div className={styles["chat-messages"]}>
+                    {messages.map((msg) => {
+                        const isMe = msg.sender_id === currentUserId;
+                        return (
+                            <div key={msg.id} className={`${styles["message-row"]} ${isMe ? styles["me"] : styles["them"]}`}>
+                                <div className={styles["message-bubble"]}>
+                                    {msg.message}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                <div className={styles["chat-input-area"]}>
+                    <form className={styles["chat-form"]} onSubmit={sendMessage}>
+                        <input
+                            type="text"
+                            placeholder="Type a message..."
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            className={styles["chat-input"]}
+                        />
+                        <button type="submit" className={styles["chat-send-btn"]} disabled={!inputText.trim()}>
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     );

@@ -1,25 +1,36 @@
 import styles from "./navTab.module.css";
 
+type Tab = "discover" | "friends" | "requests";
+
 interface NavigationTabsProps {
-  activeTab: "discover" | "connected";
-  setActiveTab: (tab: "discover" | "connected") => void;
-  connectedCount: number;
+  activeTab: Tab;
+  setActiveTab: (tab: Tab) => void;
+  pendingCount: number;
 }
 
-export default function NavigationTabs({ activeTab, setActiveTab, connectedCount }: NavigationTabsProps) {
+export default function NavigationTabs({ activeTab, setActiveTab, pendingCount }: NavigationTabsProps) {
   return (
     <div className={styles.container}>
-      <button 
-        className={`${styles.tab} ${activeTab === "discover" ? styles.active : ""}`} 
+      <button
+        className={`${styles.tab} ${activeTab === "discover" ? styles.active : ""}`}
         onClick={() => setActiveTab("discover")}
       >
         Discover
       </button>
-      <button 
-        className={`${styles.tab} ${activeTab === "connected" ? styles.active : ""}`} 
-        onClick={() => setActiveTab("connected")}
+      <button
+        className={`${styles.tab} ${activeTab === "friends" ? styles.active : ""}`}
+        onClick={() => setActiveTab("friends")}
       >
-        Connected <span className={styles.badge}>{connectedCount}</span>
+        Friends
+      </button>
+      <button
+        className={`${styles.tab} ${activeTab === "requests" ? styles.active : ""}`}
+        onClick={() => setActiveTab("requests")}
+      >
+        Friend Requests
+        {pendingCount > 0 && (
+          <span className={styles.badge}>{pendingCount}</span>
+        )}
       </button>
     </div>
   );

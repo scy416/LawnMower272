@@ -35,7 +35,7 @@ export default function Inbox() {
     };
 
     fetchInbox();
-  }, [getToken]);
+  }, []);
 
   if (loading) {
     return <div className={styles.container}>Loading messages...</div>;
@@ -46,23 +46,17 @@ export default function Inbox() {
       <div className={styles.container}>
         
         <div className={styles.header}>
-          <button onClick={() => navigate("/social")} className={styles["back-btn"]}>← Back</button>
           <h1 className={styles.title}>Messages</h1>
+          <button onClick={() => navigate("/timetable")} className={styles["back-btn"]}>Home</button>
         </div>
 
-        {chats.length === 0 ? (
+        {chats.filter(c => c.status === "accepted").length === 0 ? (
           <div className={styles["empty-state"]}>You have no messages yet.</div>
         ) : (
           <div className={styles["chat-list"]}>
-            {chats.map((chat) => {
+            {chats.filter(c => c.status === "accepted").map((chat) => {
               const initials = chat.other_user_name.slice(0, 2).toUpperCase();
               
-              // Figure out if this is a pending request waiting for YOU
-              const isActionRequired = chat.status === "pending" && !chat.is_initiator;
-              
-              // Figure out if you are waiting on THEM
-              const isWaiting = chat.status === "pending" && chat.is_initiator;
-
               return (
                 <div 
                   key={chat.conversation_id} 
@@ -73,19 +67,8 @@ export default function Inbox() {
                   
                   <div className={styles["chat-info"]}>
                     <p className={styles.name}>{chat.other_user_name}</p>
-                    
-                    {isActionRequired && (
-                      <p className={styles["status-action"]}>New request! Tap to respond.</p>
-                    )}
-                    {isWaiting && (
-                      <p className={styles["status-waiting"]}>Request sent. Waiting for reply.</p>
-                    )}
-                    {chat.status === "accepted" && (
-                      <p className={styles["status-active"]}>Tap to open chat</p>
-                    )}
+                    <p className={styles["status-active"]}>Tap to open chat</p>
                   </div>
-
-                  {isActionRequired && <div className={styles["notification-dot"]}></div>}
                 </div>
               );
             })}

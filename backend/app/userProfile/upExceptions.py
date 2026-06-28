@@ -10,11 +10,12 @@ def sendRequestExceptions(receiver_id:int, current_user: User, db: Session):
         raise HTTPException(status_code=400, detail="Can't send request to youself")
 
     receiver_profile = db.query(UserProfile).filter(UserProfile.user_id == receiver_id).first()
-    if receiver_profile in current_user.profile.friends:
-        raise HTTPException(status_code=400, detail="Already added as friends")
-    
+
     if not receiver_profile:
         raise HTTPException(status_code=404, detail="User not found")
+
+    if receiver_profile in current_user.profile.friends:
+        raise HTTPException(status_code=400, detail="Already added as friends")
 
     existing_request = db.query(FriendRequest).filter(
         or_(
@@ -36,7 +37,7 @@ def acceptRequestExceptions(request: FriendRequest, current_user: User):
     
     if request.status != "pending":
         raise HTTPException(status_code=400, detail="Friend request is not pending") 
-    #a bit unnecessary as I delete data from db instead of changing status
+
 
 def deleteFriendExceptions(user_profile, friend_profile):
     if not friend_profile:

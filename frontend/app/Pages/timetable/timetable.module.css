@@ -1,25 +1,21 @@
-
 .timetable-page {
   min-height: 100vh;
   background: #f8fafc;
   color: #0f172a;
-  padding: 40px 24px;
-}
-
-.dashboard-container {
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 32px;
+  background: #ffffff;
+  border-bottom: 2px solid #e2e8f0;
   margin-bottom: 32px;
 }
 
 .topbar-title {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   color: #0b2d5a;
 }
@@ -39,6 +35,208 @@
   cursor: pointer;
 }
 
+.layout-container {
+  display: flex;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  width: 100%;
+  background: #f1f5f9;
+  border: none;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  color: #0b2d5a;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar-header:hover {
+  background: #e2e8f0;
+}
+
+.sidebar-header-static {
+  width: 100%;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #0b2d5a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friend-count-badge {
+  background: #0b2d5a;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  line-height: 1.5;
+}
+
+.sidebar-content {
+  padding: 12px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.sidebar-content p {
+  margin: 4px 0;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 4px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.friend-item:hover {
+  background: #f1f5f9;
+}
+
+.friend-item:last-child {
+  border-bottom: none;
+}
+
+.sidebar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sidebar-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-bio {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.inbox-item:last-child {
+  border-bottom: none;
+}
+
+.inbox-item:hover {
+  background: #f8fafc;
+}
+
+.inbox-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.inbox-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unread-badge {
+  background-color: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.accept-btn {
+  background: #0b2d5a;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.dashboard-container {
+  flex: 1;
+  min-width: 0;
+}
+
 .module-form {
   display: flex;
   justify-content: flex-end;
@@ -51,11 +249,11 @@
   background: #ffffff;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
+  padding: 8px 12px;
+  font-size: 13px;
   color: #0f172a;
   outline: none;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .module-input::placeholder {
@@ -69,9 +267,9 @@
 .btn-add {
   background: #0b2d5a;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 10px 22px;
+  padding: 8px 16px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -79,9 +277,9 @@
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .scard {
@@ -89,8 +287,11 @@
   border: 1px solid #e2e8f0;
   border-top: 3px solid #0b2d5a;
   border-radius: 12px;
-  padding: 24px 20px;
+  padding: 16px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .scard-label {
@@ -98,11 +299,11 @@
   font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .scard-val {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 800;
   color: #0b2d5a;
   line-height: 1;
@@ -113,23 +314,24 @@
 }
 
 .scard-sub {
-  font-size: 13px;
+  font-size: 12px;
   color: #64748b;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .grid-wrapper {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  overflow-x: auto;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 100px repeat(13, 1fr);
+  grid-template-columns: 80px repeat(13, 1fr);
   gap: 0;
   background-color: transparent;
-  min-width: 850px;
+  width: 100%;
 }
 
 .col-head {
@@ -138,10 +340,10 @@
   justify-content: center;
   color: #475569;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 11px;
   border-bottom: 1px solid #e2e8f0;
   border-left: 1px solid #e2e8f0;
-  padding: 18px 0;
+  padding: 10px 0;
   background: #f8fafc;
 }
 
@@ -153,10 +355,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-weight: 800;
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 11px;
   color: #0b2d5a;
-  padding: 16px 12px;
+  padding: 8px;
   border-bottom: 1px solid #e2e8f0;
   background: #f8fafc;
 }
@@ -164,33 +366,29 @@
 .module-name {
   flex-grow: 1;
   text-align: left;
-  padding-left: 2px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .remove-mod-btn {
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  padding: 2px 6px;
-  line-height: 1;
+  padding: 0 4px;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
 
 .cell {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-  min-height: 80px;
-  padding: 10px 8px;
+  justify-content: flex-start;
+  gap: 4px;
+  min-height: 60px;
+  padding: 6px 4px;
   border-bottom: 1px solid #e2e8f0;
   border-left: 1px solid #e2e8f0;
   background: #ffffff;
@@ -201,18 +399,18 @@
   border: 1px solid rgba(11, 45, 90, 0.12);
   border-left: 3px solid #0b2d5a;
   color: #0b2d5a;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 600;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin: 2px 0;
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin: 0;
   text-align: left;
-  line-height: 1.3;
+  line-height: 1.2;
   white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(11, 45, 90, 0.03);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* PLACEHOLDER CODE FOR MILESTONE 1 SUBMISSION */
 .social-btn {
   background: #ffffff;
   color: #0b2d5a;
@@ -229,5 +427,4 @@
   background: #f1f5f9;
   border-color: #0b2d5a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(11, 45, 90, 0.05);
 }

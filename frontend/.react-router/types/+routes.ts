@@ -29,8 +29,10 @@ type Pages = {
   "/Profile": {
     params: {};
   };
-  "/Profile/edit": {
-    params: {};
+  "/Profile/:userId": {
+    params: {
+      "userId": string;
+    };
   };
   "/Chat/:conversationId": {
     params: {
@@ -45,7 +47,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social" | "/Profile" | "/Profile/edit" | "/Chat/:conversationId" | "/Inbox";
+    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social" | "/Profile" | "/Profile/:userId" | "/Chat/:conversationId" | "/Inbox";
   };
   "Pages/homePage/home.tsx": {
     id: "Pages/homePage/home";
@@ -71,9 +73,9 @@ type RouteFiles = {
     id: "Pages/userProfile/mainProfile";
     page: "/Profile";
   };
-  "Pages/userProfile/editProfile.tsx": {
-    id: "Pages/userProfile/editProfile";
-    page: "/Profile/edit";
+  "Pages/userProfile/publicProfile.tsx": {
+    id: "Pages/userProfile/publicProfile";
+    page: "/Profile/:userId";
   };
   "Pages/social/chat/chatRoom.tsx": {
     id: "Pages/social/chat/chatRoom";
@@ -93,7 +95,7 @@ type RouteModules = {
   "Pages/timetable/timetable": typeof import("./app/Pages/timetable/timetable.tsx");
   "Pages/social/social": typeof import("./app/Pages/social/social.tsx");
   "Pages/userProfile/mainProfile": typeof import("./app/Pages/userProfile/mainProfile.tsx");
-  "Pages/userProfile/editProfile": typeof import("./app/Pages/userProfile/editProfile.tsx");
+  "Pages/userProfile/publicProfile": typeof import("./app/Pages/userProfile/publicProfile.tsx");
   "Pages/social/chat/chatRoom": typeof import("./app/Pages/social/chat/chatRoom.tsx");
   "Pages/social/chat/inbox": typeof import("./app/Pages/social/chat/inbox.tsx");
 };

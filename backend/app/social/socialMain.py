@@ -1,3 +1,4 @@
+import random
 from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
@@ -31,12 +32,10 @@ def make_or_get_conversation(target_user_id: int, current_user: User = Depends(g
             "acceptor_id": existing_conv.acceptor_id
         }
 
-    initial_status = "accepted" if is_friend(current_user, target_user_id, db) else "pending"
-
     new_conversation = Conversation(
         initiator_id=current_user.id, 
         acceptor_id=target_user_id, 
-        status=initial_status
+        status="accepted"
     )
 
     db.add(new_conversation)
@@ -50,39 +49,27 @@ def make_or_get_conversation(target_user_id: int, current_user: User = Depends(g
         "acceptor_id": new_conversation.acceptor_id
     }
 
-@router.patch("/accept_chat/{conversation_id}")
-def accept_conversation_request(conversation_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    convo_request = db.query(Conversation).filter(Conversation.id == conversation_id).first()
-    exceptions.accept_convo_exceptions(convo_request, current_user)
-    convo_request.status = "accepted"
-
-    db.commit()
-    db.refresh(convo_request)
-    return {"message": "accepted", "conversation_id": convo_request.id}
-
-@router.delete("/reject_request/{conversation_id}")
-def reject_conversation_request(conversation_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    convo_request = db.query(Conversation).filter(Conversation.id == conversation_id).first()
-    exceptions.reject_convo_exceptions(convo_request, current_user)
-
-    db.delete(convo_request)
-    db.commit()
-
-    return {"message": "rejected"}
-
-@router.get("/discover") #currently my "algorithm" for social interface :P
+@router.get("/discover")
 def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    other_profiles = db.query(UserProfile).filter(UserProfile.user_id != current_user.id).all()
+    friend_profiles = current_user.profile.friends
+    friend_ids = {fp.user_id for fp in friend_profiles}
+    friend_ids.add(current_user.id)
+
+    other_profiles = db.query(UserProfile).filter(
+        UserProfile.user_id.notin_(friend_ids)
+    ).all()
+
+    sample = random.sample(other_profiles, min(3, len(other_profiles)))
 
     results = []
-    for profile in other_profiles:
+    for profile in sample:
         results.append({
             "id": profile.user_id,
-            "name": profile.user.username,  
-            "year": profile.year or 3,      
+            "name": profile.user.username,
+            "year": profile.year or 3,
             "major": profile.major or "Undeclared",
             "bio": profile.bio or "No bio provided.",
-            "modules": ["m1", "m2"] 
+            "modules": profile.modulesTaken.split(",") if profile.modulesTaken else [],
         })
 
     return results

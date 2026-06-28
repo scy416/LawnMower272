@@ -11,6 +11,8 @@ export interface Profile {
   major: string | null;
   year: number | null;
   bio: string | null;
+  modulesTaken?: string[];
+  modulesToTake?: string[];
 }
 
 export interface Friend {

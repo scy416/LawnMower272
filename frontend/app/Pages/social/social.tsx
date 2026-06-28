@@ -4,82 +4,215 @@ import styles from "./social.module.css";
 import SearchBar from "./searchBar";
 import NavigationTabs from "./navTab";
 import SeniorCard from "../../Components/seniorCard";
-import { userAuth } from "../../hooks";
+import { userAuth, getProfile, getFriends, getPendingRequests } from "../../hooks";
+
+type Tab = "discover" | "friends" | "requests";
 
 export default function Social() {
   const navigate = useNavigate();
-  const [seniors, setSeniors] = useState([]);
+  const [discoverUsers, setDiscoverUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedModule, setSelectedModule] = useState("All");
-  const [activeTab, setActiveTab] = useState<"discover" | "connected">("discover");
-  const { getToken } = userAuth()
+  const [activeTab, setActiveTab] = useState<Tab>("discover");
+
+  const { getToken } = userAuth();
+  const { loadProfileInfo } = getProfile();
+  const { friends, refetch: refetchFriends } = getFriends();
+  const { pendingRequests, refetch: refetchRequests } = getPendingRequests();
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {
-    const fetchSeniors = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/social/discover", {
-          headers: {
-            "Authorization": `Bearer ${getToken()}`
-          }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setSeniors(data); 
-        }
-      } catch (err) {
-        console.error("Failed to fetch recommendations:", err);
-      }
-    };
-
-    fetchSeniors();
+    loadProfileInfo();
+    fetchDiscover();
   }, []);
-  const handleConnect = async (targetUserId: number) => {
+
+  const fetchDiscover = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/social/discover", {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (res.ok) setDiscoverUsers(await res.json());
+    } catch (err) {
+      console.error("Failed to fetch discover:", err);
+    }
+  };
+
+  const handleAddFriend = async (targetUserId: number) => {
+    try {
+      const res = await fetch(`http://localhost:8000/friends/requests/send/${targetUserId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.warn(errorData.detail || "Failed to send request");
+      }
+    } catch (err) {
+      console.error("Failed to send friend request:", err);
+    }
+  };
+
+  const handleAcceptRequest = async (requestId: number) => {
+    try {
+      const res = await fetch(`http://localhost:8000/friends/requests/accept/${requestId}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (res.ok) refetchRequests();
+    } catch (err) {
+      console.error("Failed to accept request:", err);
+    }
+  };
+
+  const handleRejectRequest = async (requestId: number) => {
+    try {
+      const res = await fetch(`http://localhost:8000/friends/requests/reject/${requestId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (res.ok) refetchRequests();
+    } catch (err) {
+      console.error("Failed to reject request:", err);
+    }
+  };
+
+  const handleStartChat = async (targetUserId: number) => {
     try {
       const res = await fetch(`http://localhost:8000/social/chat/${targetUserId}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getToken()}` }
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
       });
       if (res.ok) {
         const data = await res.json();
         navigate(`/chat/${data.conversation_id}`);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Failed to start chat:", err);
     }
   };
+
+  const handleRemoveFriend = async (friendId: number) => {
+    try {
+      const res = await fetch(`http://localhost:8000/friends/delete/${friendId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (res.ok) {
+        refetchFriends();
+      }
+    } catch (err) {
+      console.error("Failed to remove friend:", err);
+    }
+  };
+
+  const filteredDiscover = discoverUsers.filter((user) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return user.name.toLowerCase().includes(q) || user.major.toLowerCase().includes(q);
+  });
+
+  const filteredFriends = (friends as any[]).filter((friend) => {
+    if (!searchQuery) return true;
+    return friend.username.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
 
   return (
     <div className={styles["social-page"]}>
       <div className={styles["dashboard-container"]}>
-
         <div className={styles.topbar}>
           <div className={styles["topbar-title"]}>SyllaBuddy</div>
           <div className={styles["nav-links"]}>
-            <button className={styles["nav-btn"]} onClick={() => navigate("/timetable")}>Timetable</button>
-            <button className={`${styles["nav-btn"]} ${styles["active"]}`}>Connect</button>
+            <button className={styles["nav-btn"]} onClick={() => navigate("/timetable")}>Home</button>
             <button className={styles["nav-btn"]} onClick={handleLogout}>Sign out</button>
           </div>
         </div>
 
         <div className={styles["header-row"]}>
           <div>
-            <h1 className={styles["page-title"]}>Find seniors</h1>
-            <p className={styles["page-subtitle"]}>Connect with seniors who have taken your modules.</p>
+            <h1 className={styles["page-title"]}>Connect</h1>
+            <p className={styles["page-subtitle"]}>Discover users, manage friends, and handle requests.</p>
           </div>
         </div>
 
-        <SearchBar 
-          searchQuery={searchQuery} setSearchQuery={setSearchQuery}
-          selectedModule={selectedModule} setSelectedModule={setSelectedModule}
-        />
-        <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} connectedCount={2} />
-        <SeniorCard seniors={seniors} handleConnect={handleConnect} />
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} pendingCount={pendingRequests.length} />
 
+        {activeTab === "discover" && (
+          <>
+            <SeniorCard seniors={filteredDiscover} handleAddFriend={handleAddFriend} />
+            {filteredDiscover.length === 0 && (
+              <p className={styles["empty-msg"]}>No users found.</p>
+            )}
+          </>
+        )}
+
+        {activeTab === "friends" && (
+          <div className={styles["friends-list"]}>
+            {filteredFriends.length > 0 ? (
+              filteredFriends.map((friend: any) => (
+                <div key={friend.id} className={styles["friend-row"]}>
+                  <div className={styles["friend-avatar"]}>
+                    {friend.username.slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className={styles["friend-name"]}>{friend.username}</span>
+                  <div className={styles["request-actions"]}>
+                    <button
+                      className={styles["accept-btn"]}
+                      onClick={() => navigate(`/profile/${friend.id}`)}
+                    >
+                      View Profile
+                    </button>
+                    <button
+                      className={styles["grey-btn"]}
+                      onClick={() => handleStartChat(friend.id)}
+                    >
+                      Message
+                    </button>
+                    <button
+                      className={styles["reject-btn"]}
+                      onClick={() => handleRemoveFriend(friend.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={styles["empty-msg"]}>
+                {searchQuery ? "No friends match your search." : "You have no friends yet. Go discover some!"}
+              </p>
+            )}
+          </div>
+        )}
+
+        {activeTab === "requests" && (
+          <div className={styles["friends-list"]}>
+            {pendingRequests.length > 0 ? (
+              pendingRequests.map((req: any) => (
+                <div key={req.request_id} className={styles["request-row"]}>
+                  <div className={styles["friend-avatar"]}>
+                    {req.sender_username.slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className={styles["friend-name"]}>{req.sender_username}</span>
+                  <div className={styles["request-actions"]}>
+                    <button className={styles["accept-btn"]} onClick={() => handleAcceptRequest(req.request_id)}>
+                      Accept
+                    </button>
+                    <button className={styles["reject-btn"]} onClick={() => handleRejectRequest(req.request_id)}>
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={styles["empty-msg"]}>No pending friend requests.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

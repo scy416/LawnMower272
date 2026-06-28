@@ -19,11 +19,11 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
     existing_email = db.query(User).filter(User.email == user_in.email).first()
     if existing_email:
-        raise exceptions.EmailRepeatedException()
+        raise aExceptions.EmailRepeatedException()
 
     existing_username = db.query(User).filter(User.username == user_in.username).first()
     if existing_username:
-        raise exceptions.UsernameRepeatedException()
+        raise aExceptions.UsernameRepeatedException()
 
     hashed_password = get_password_hash(user_in.password)
 

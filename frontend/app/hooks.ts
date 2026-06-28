@@ -19,7 +19,19 @@ export function userAuth() {
         navigate("/login");
     };
 
-    return { getToken, handleUnauthorized };
+    const getUserId = (): number | null => {
+        const token = getToken();
+        if (!token) return null;
+        try {
+            const payload = JSON.parse(window.atob(token.split('.')[1]));
+            return parseInt(payload.sub, 10);
+        } catch (e) {
+            console.error("Failed to decode token", e);
+            return null;
+        }
+    };
+
+    return { getToken, getUserId, handleUnauthorized };
 }
 
 export function getProfile() {
@@ -95,4 +107,82 @@ export function getFriends() {
     },[])
 
     return { friends, isLoading, error, refetch: getFriendList };
+}
+
+export function getPendingRequests() {
+    const [pendingRequests, setPendingRequests] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { getToken, handleUnauthorized } = userAuth();
+
+    const fetchPendingRequests = async () => {
+        setIsLoading(true);
+        try {
+            const token = getToken();
+            if (!token) return;
+
+            const res = await fetch("http://localhost:8000/friends/requests/pending", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.status === 401) {
+                handleUnauthorized();
+                return;
+            }
+
+            if (res.ok) {
+                const data = await res.json();
+                setPendingRequests(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch pending requests:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPendingRequests();
+    }, []);
+
+    return { pendingRequests, isLoading, refetch: fetchPendingRequests };
+}
+
+export function getInbox() {
+    const [conversations, setConversations] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { getToken, handleUnauthorized } = userAuth();
+
+    const fetchInbox = async () => {
+        setIsLoading(true);
+        try {
+            const token = getToken();
+            if (!token) return;
+
+            const res = await fetch("http://localhost:8000/inbox/me", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.status === 401) {
+                handleUnauthorized();
+                return;
+            }
+
+            if (res.ok) {
+                const data = await res.json();
+                setConversations(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch inbox:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchInbox();
+    }, []);
+
+    return { conversations, isLoading, refetch: fetchInbox };
 }

@@ -7,5 +7,7 @@ def build_profile_response(user: User) -> ProfileResponse:
         email=user.email,
         major=user.profile.major,
         year=user.profile.year,
-        bio=user.profile.bio
+        bio=user.profile.bio,
+        modulesTaken=user.profile.modulesTaken.split(",") if user.profile.modulesTaken else [],
+        modulesToTake=user.profile.modulesToTake.split(",") if user.profile.modulesToTake else []
     )

@@ -7,8 +7,8 @@ export default [
     route("SignUp", "Pages/auth/signUp.tsx"),
     route("Timetable", "Pages/timetable/timetable.tsx"),
     route("Social", "Pages/social/social.tsx"),
-    route("Profile", "Pages/userProfile/mainProfile.tsx" ),
-    route("Profile/edit", "Pages/userProfile/editProfile.tsx"),
+    route("Profile", "Pages/userProfile/mainProfile.tsx"),
+    route("Profile/:userId", "Pages/userProfile/publicProfile.tsx"),
     route("Chat/:conversationId", "Pages/social/chat/chatRoom.tsx"),
     route("Inbox", "Pages/social/chat/inbox.tsx")
 ] satisfies RouteConfig;

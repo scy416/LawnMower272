@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./seniorCard.module.css";
 
 interface Senior {
@@ -11,10 +12,18 @@ interface Senior {
 
 interface SeniorCardProps {
   seniors: Senior[];
-  handleConnect: (targetUserId: number) => void;
+  handleAddFriend: (targetUserId: number) => void;
 }
 
-export default function SeniorCard({ seniors, handleConnect }: SeniorCardProps) {
+export default function SeniorCard({ seniors, handleAddFriend }: SeniorCardProps) {
+  const [sentIds, setSentIds] = useState<Set<number>>(new Set());
+
+  const handleClick = (id: number) => {
+    if (sentIds.has(id)) return;
+    handleAddFriend(id);
+    setSentIds((prev) => new Set(prev).add(id));
+  };
+
   return (
     <div className={styles.grid}>
       {seniors.map((senior) => {
@@ -32,8 +41,13 @@ export default function SeniorCard({ seniors, handleConnect }: SeniorCardProps) 
             <div className={styles.modules}>
               {senior.modules.map(mod => <span key={mod} className={styles.pill}>{mod}</span>)}
             </div>
-            <button className={styles.btn} onClick={() => handleConnect(senior.id)}>
-              Connect
+            <button 
+              className={styles.btn} 
+              onClick={() => handleClick(senior.id)}
+              disabled={sentIds.has(senior.id)}
+              style={sentIds.has(senior.id) ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
+            >
+              {sentIds.has(senior.id) ? "Sent!" : "Add Friend"}
             </button>
           </div>
         );

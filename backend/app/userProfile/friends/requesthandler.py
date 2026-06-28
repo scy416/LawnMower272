@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
@@ -35,3 +35,17 @@ def accept_friend_request(request_id: int, current_user: User = Depends(get_curr
     db.commit()
 
     return {"message": "Friend request accepted!"}
+
+@router.delete("/reject/{request_id}")
+def reject_friend_request(request_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    friend_request = db.query(FriendRequest).filter(FriendRequest.id == request_id).first()
+
+    if not friend_request:
+        raise HTTPException(status_code=404, detail="Friend request not found.")
+    if friend_request.receiver_id != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only reject requests sent to you.")
+
+    db.delete(friend_request)
+    db.commit()
+
+    return {"message": "Friend request rejected."}

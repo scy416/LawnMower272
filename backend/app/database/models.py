@@ -1,5 +1,5 @@
 from app.database.database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -12,6 +12,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
 
     profile = relationship("UserProfile", back_populates="user", uselist=False)
+    modules = relationship("UserModule", back_populates="user")
 
 friends_table = Table(
     'friends',
@@ -28,6 +29,8 @@ class UserProfile(Base):
     major = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     bio = Column(String, nullable=True)
+    modulesTaken = Column(String, nullable=True)
+    modulesToTake = Column(String, nullable=True)
     
     user = relationship("User", back_populates = "profile")
     
@@ -35,7 +38,7 @@ class UserProfile(Base):
         primaryjoin = (user_id == friends_table.c.profile_id),
         secondaryjoin = (user_id == friends_table.c.friend_profile_id)
     )
-    #courses = Column(Integer) #NEEDS A RELATIONSHIP, CREATE LATER
+
 
 class UserModule(Base):
     __tablename__ = 'user_modules'
@@ -43,6 +46,8 @@ class UserModule(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     module_code = Column(String, nullable=False, index=True)
+
+    user = relationship("User", back_populates="modules")
 
 class FriendRequest(Base):
     __tablename__ = 'friend_requests'
@@ -60,7 +65,7 @@ class Conversation(Base):
     acceptor_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
     status = Column(String, default="pending", nullable=False)
 
-#Work on scalability features for messages table in future
+
 class Message(Base):
     __tablename__ = 'messages'
 
@@ -69,3 +74,4 @@ class Message(Base):
     sender_id = Column(Integer, ForeignKey('user_profiles.user_id', ondelete='CASCADE'), nullable=False, index=True)
     message = Column(String, nullable=False)
     time_sent = Column(DateTime, default=datetime.utcnow)
+    is_read = Column(Boolean, default=False, nullable=False)

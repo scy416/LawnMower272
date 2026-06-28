@@ -1,10 +1,12 @@
 from pydantic import BaseModel
-from typing import Optional 
+from typing import Optional, List
 
 class ProfileUpdate(BaseModel):
     major: Optional[str] = None
     year: Optional[int] = None
     bio: Optional[str] = None
+    modulesTaken: Optional[List[str]] = None
+    modulesToTake: Optional[List[str]] = None
 
 class UserProfileBase(BaseModel):
     username: str
@@ -17,3 +19,5 @@ class ProfileResponse(UserProfileBase):
     major: Optional[str]
     year: Optional[int]
     bio: Optional[str]
+    modulesTaken: Optional[List[str]] = None
+    modulesToTake: Optional[List[str]] = None

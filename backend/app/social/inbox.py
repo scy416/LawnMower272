@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, and_, desc
+from sqlalchemy import or_, and_, func, desc
 
 from app.database.models import User, UserProfile, Conversation, Message
 from app.database.database import get_db
@@ -11,7 +11,7 @@ import app.social.scExceptions as exceptions
 router = APIRouter(prefix="/inbox", tags=["inbox"])
 
 @router.get("/me")
-def get_inbox(current_user: User = Depends(get_current_user),db: Session = Depends(get_db)):
+def get_inbox(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     chats = db.query(Conversation).filter(
         or_(
             Conversation.initiator_id == current_user.id,
@@ -25,12 +25,26 @@ def get_inbox(current_user: User = Depends(get_current_user),db: Session = Depen
         other_profile = db.query(UserProfile).filter(UserProfile.user_id == other_user_id).first()
         other_name = other_profile.user.username if other_profile and other_profile.user else "Unknown User"
 
+        message_count = db.query(func.count(Message.id)).filter(
+            Message.conversation_id == chat.id
+        ).scalar()
+
+        unread_count = db.query(func.count(Message.id)).filter(
+            and_(
+                Message.conversation_id == chat.id,
+                Message.sender_id != current_user.id,
+                Message.is_read == False
+            )
+        ).scalar()
+
         inbox_data.append({
             "conversation_id": chat.id,
             "status": chat.status,
             "other_user_id": other_user_id,
             "other_user_name": other_name,
-            "is_initiator": chat.initiator_id == current_user.id
+            "is_initiator": chat.initiator_id == current_user.id,
+            "message_count": message_count or 0,
+            "unread_count": unread_count or 0,
         })
 
     return inbox_data
@@ -43,6 +57,16 @@ def get_chat_history(convo_id: int, current_user: User = Depends(get_current_use
     messages = db.query(Message).filter(
         Message.conversation_id == convo_id
         ).order_by(desc(Message.time_sent)).limit(50).all()
+
+
+    db.query(Message).filter(
+        and_(
+            Message.conversation_id == convo_id,
+            Message.sender_id != current_user.id,
+            Message.is_read == False
+        )
+    ).update({"is_read": True})
+    db.commit()
 
     return reversed(messages)
 
