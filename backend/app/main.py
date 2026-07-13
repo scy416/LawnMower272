@@ -12,6 +12,8 @@ from app.userProfile.friends.requesthandler import router as friend_request_rout
 from app.social.socialMain import router as social_router
 from app.social.inbox import router as inbox_router
 from app.chatbot.chatbotMain import router as chatbot_router
+from app.forum.forumMain import router as forum_router
+from app.notifications.notificationMain import router as notification_router
 
 app = FastAPI()
 
@@ -34,3 +36,5 @@ app.include_router(friend_request_router)
 app.include_router(social_router)
 app.include_router(inbox_router)
 app.include_router(chatbot_router)
+app.include_router(forum_router)
+app.include_router(notification_router)

@@ -10,17 +10,12 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import ChatbotWidget from "./Components/ChatbotWidget";
+import NotificationBell from "./Components/NotificationBell";
 
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap",
+    href: "https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,600,700,800&display=swap",
   },
 ];
 
@@ -46,6 +41,7 @@ export default function App() {
   return (
     <>
       <Outlet />
+      <NotificationBell />
       <ChatbotWidget />
     </>
   );

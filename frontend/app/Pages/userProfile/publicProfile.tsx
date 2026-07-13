@@ -16,35 +16,77 @@ export default function PublicProfile() {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { getToken } = userAuth();
+
   const [profile, setProfile] = useState<PublicProfileData | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const [friendRequested, setFriendRequested] = useState(false);
 
   useEffect(() => {
     const load = async () => {
       const token = getToken();
       if (!token) return;
-      const res = await fetch(`http://localhost:8000/profile/${userId}`, {
+
+      const profileRes = await fetch(`http://localhost:8000/profile/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        setProfile(await res.json());
+
+      if (profileRes.ok) {
+        setProfile(await profileRes.json());
       } else {
         setNotFound(true);
+      }
+
+      const friendsRes = await fetch("http://localhost:8000/friends/friends_list", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (friendsRes.ok) {
+        const friends: { id: number }[] = await friendsRes.json();
+        setIsFriend(friends.some((f) => String(f.id) === userId));
       }
     };
     load();
   }, [userId]);
+
+  const handleAddFriend = async () => {
+    const token = getToken();
+    if (!token) return;
+    const res = await fetch(`http://localhost:8000/friends/requests/send/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) setFriendRequested(true);
+  };
 
   if (notFound) return <p className={styles["muted"]}>User not found.</p>;
   if (!profile) return <p className={styles["muted"]}>Loading...</p>;
 
   return (
     <div className={styles["card"]}>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
-        <button
-          onClick={() => navigate("/social")}
-          className={styles["home-btn"]}
-        >
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginBottom: "16px" }}>
+        {isFriend ? (
+          <button
+            className={styles["home-btn"]}
+            disabled
+            style={{ background: "#94a3b8", cursor: "not-allowed" }}
+          >
+            Already friends!
+          </button>
+        ) : friendRequested ? (
+          <button
+            className={styles["home-btn"]}
+            disabled
+            style={{ background: "#94a3b8", cursor: "not-allowed" }}
+          >
+            Request Sent
+          </button>
+        ) : (
+          <button className={styles["home-btn"]} onClick={handleAddFriend}>
+            Add Friend
+          </button>
+        )}
+        <button onClick={() => navigate(-1)} className={styles["home-btn"]}>
           Back
         </button>
       </div>

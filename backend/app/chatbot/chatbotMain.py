@@ -1,6 +1,7 @@
 import os
 from fastapi import APIRouter, HTTPException
 from app.chatbot.chatbotClasses import ChatRequest
+from app.config import settings
 from google import genai
 from google.genai import types
 
@@ -18,9 +19,9 @@ If a student asks something outside your knowledge or outside NUS scope, please 
 
 @router.post("/message")
 async def chat_with_bot(request: ChatRequest):
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = settings.GEMINI_API_KEY
     if not api_key:
-        raise HTTPException(status_code=500, detail="Gemini API key is not configured in the environment.")
+        raise HTTPException(status_code=500, detail="Gemini API key is not configured.")
 
     try:
         client = genai.Client(api_key=api_key)
@@ -30,7 +31,7 @@ async def chat_with_bot(request: ChatRequest):
 
             role = "user" if msg.role == "user" else "model"
             contents.append(
-                types.Content(role=role, parts=[types.Part.from_text(msg.content)])
+                types.Content(role=role, parts=[types.Part.from_text(text=msg.content)])
             )
             
         response = client.models.generate_content(

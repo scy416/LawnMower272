@@ -126,8 +126,8 @@ export default function Social() {
         <div className={styles.topbar}>
           <div className={styles["topbar-title"]}>SyllaBuddy</div>
           <div className={styles["nav-links"]}>
-            <button className={styles["nav-btn"]} onClick={() => navigate("/timetable")}>Home</button>
-            <button className={styles["nav-btn"]} onClick={handleLogout}>Sign out</button>
+            <button className="nav-btn-global" onClick={() => navigate("/timetable")}>Home</button>
+            <button className="nav-btn-global" onClick={handleLogout}>Sign out</button>
           </div>
         </div>
 
@@ -158,14 +158,14 @@ export default function Social() {
                   <div className={styles["friend-avatar"]}>
                     {friend.username.slice(0, 2).toUpperCase()}
                   </div>
-                  <span className={styles["friend-name"]}>{friend.username}</span>
+                  <span
+                    className={styles["friend-name"]}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/Profile/${friend.id}`)}
+                  >
+                    {friend.username}
+                  </span>
                   <div className={styles["request-actions"]}>
-                    <button
-                      className={styles["accept-btn"]}
-                      onClick={() => navigate(`/profile/${friend.id}`)}
-                    >
-                      View Profile
-                    </button>
                     <button
                       className={styles["grey-btn"]}
                       onClick={() => handleStartChat(friend.id)}

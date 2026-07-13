@@ -42,12 +42,23 @@ type Pages = {
   "/Inbox": {
     params: {};
   };
+  "/todo": {
+    params: {};
+  };
+  "/forum": {
+    params: {};
+  };
+  "/forum/:moduleCode": {
+    params: {
+      "moduleCode": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social" | "/Profile" | "/Profile/:userId" | "/Chat/:conversationId" | "/Inbox";
+    page: "/" | "/Login" | "/SignUp" | "/Timetable" | "/Social" | "/Profile" | "/Profile/:userId" | "/Chat/:conversationId" | "/Inbox" | "/todo" | "/forum" | "/forum/:moduleCode";
   };
   "Pages/homePage/home.tsx": {
     id: "Pages/homePage/home";
@@ -85,6 +96,18 @@ type RouteFiles = {
     id: "Pages/social/chat/inbox";
     page: "/Inbox";
   };
+  "Pages/todo/todo.tsx": {
+    id: "Pages/todo/todo";
+    page: "/todo";
+  };
+  "Pages/forum/forum.tsx": {
+    id: "Pages/forum/forum";
+    page: "/forum";
+  };
+  "Pages/forum/forumModule.tsx": {
+    id: "Pages/forum/forumModule";
+    page: "/forum/:moduleCode";
+  };
 };
 
 type RouteModules = {
@@ -98,4 +121,7 @@ type RouteModules = {
   "Pages/userProfile/publicProfile": typeof import("./app/Pages/userProfile/publicProfile.tsx");
   "Pages/social/chat/chatRoom": typeof import("./app/Pages/social/chat/chatRoom.tsx");
   "Pages/social/chat/inbox": typeof import("./app/Pages/social/chat/inbox.tsx");
+  "Pages/todo/todo": typeof import("./app/Pages/todo/todo.tsx");
+  "Pages/forum/forum": typeof import("./app/Pages/forum/forum.tsx");
+  "Pages/forum/forumModule": typeof import("./app/Pages/forum/forumModule.tsx");
 };

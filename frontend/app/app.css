@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Ranade", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 html,
 body {
-  font-family: "Montserrat", var(--font-sans);
+  font-family: "Ranade", var(--font-sans);
   @apply bg-white dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
@@ -29,4 +29,21 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* shared nav button used across all pages */
+.nav-btn-global {
+  background: #ffffff;
+  color: #0b2d5a;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.nav-btn-global:hover {
+  background: #f1f5f9;
 }

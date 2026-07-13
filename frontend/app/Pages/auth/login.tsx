@@ -32,7 +32,7 @@ export default function Login() {
       }
 
       localStorage.setItem("access_token", data.access_token);
-      navigate("/timetable");
+      navigate("/todo");
     } catch {
       setError("Could not connect to server");
     } finally {

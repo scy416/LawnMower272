@@ -31,8 +31,12 @@
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #f1f5f9;
 }
 
 .layout-container {
@@ -54,7 +58,7 @@
 .sidebar-section {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -69,7 +73,6 @@
   font-size: 13px;
   color: #0b2d5a;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .sidebar-header:hover {
@@ -119,8 +122,7 @@
   font-weight: 600;
   color: #0f172a;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.2s;
+  border-radius: 4px;
 }
 
 .friend-item:hover {
@@ -182,8 +184,7 @@
   padding: 6px 4px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.15s;
+  border-radius: 4px;
 }
 
 .inbox-item:last-child {
@@ -248,7 +249,7 @@
 .module-input {
   background: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 12px;
   font-size: 13px;
   color: #0f172a;
@@ -270,9 +271,13 @@
   font-size: 13px;
   font-weight: 600;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
+}
+
+.btn-add:hover {
+  background: #0f3d7a;
 }
 
 .summary {
@@ -286,7 +291,7 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-top: 3px solid #0b2d5a;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px;
   text-align: center;
   display: flex;
@@ -322,7 +327,7 @@
 .grid-wrapper {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -402,7 +407,7 @@
   font-size: 9px;
   font-weight: 600;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
   margin: 0;
   text-align: left;
   line-height: 1.2;
@@ -418,13 +423,10 @@
   font-size: 13px;
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .social-btn:hover {
   background: #f1f5f9;
-  border-color: #0b2d5a;
-  transform: translateY(-1px);
 }

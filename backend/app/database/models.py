@@ -75,3 +75,27 @@ class Message(Base):
     message = Column(String, nullable=False)
     time_sent = Column(DateTime, default=datetime.utcnow)
     is_read = Column(Boolean, default=False, nullable=False)
+
+
+class ModuleReview(Base):
+    __tablename__ = 'module_reviews'
+
+    id = Column(Integer, primary_key=True, index=True)
+    author_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    module_code = Column(String, nullable=False, index=True)
+    rating = Column(Integer, nullable=False)  # 1-5
+    comment = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    author = relationship("User")
+
+
+class Notification(Base):
+    __tablename__ = 'notifications'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
+    title = Column(String, nullable=False)
+    body = Column(String, nullable=False)
+    is_read = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)

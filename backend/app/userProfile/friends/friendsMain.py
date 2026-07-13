@@ -40,6 +40,15 @@ def get_pending_requests(current_user: User = Depends(get_current_user), db: Ses
         for req in pending
     ]
 
+@router.get("/requests/sent", status_code=status.HTTP_200_OK)
+def get_sent_requests(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    sent = db.query(FriendRequest).filter(
+        FriendRequest.sender_id == current_user.id,
+        FriendRequest.status == "pending"
+    ).all()
+    return [{"receiver_id": req.receiver_id} for req in sent]
+
+
 @router.delete("/delete/{friend_id}")
 def delete_friend(friend_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     user_profile = current_user.profile

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import styles from "./seniorCard.module.css";
 
 interface Senior {
@@ -16,6 +17,7 @@ interface SeniorCardProps {
 }
 
 export default function SeniorCard({ seniors, handleAddFriend }: SeniorCardProps) {
+  const navigate = useNavigate();
   const [sentIds, setSentIds] = useState<Set<number>>(new Set());
 
   const handleClick = (id: number) => {
@@ -33,7 +35,13 @@ export default function SeniorCard({ seniors, handleAddFriend }: SeniorCardProps
             <div className={styles.header}>
               <div className={styles.avatar}>{initials}</div>
               <div>
-                <p className={styles.name}>{senior.name}</p>
+                <p
+                  className={styles.name}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/Profile/${senior.id}`)}
+                >
+                  {senior.name}
+                </p>
                 <p className={styles.major}>Y{senior.year} · {senior.major}</p>
               </div>
             </div>
@@ -41,8 +49,8 @@ export default function SeniorCard({ seniors, handleAddFriend }: SeniorCardProps
             <div className={styles.modules}>
               {senior.modules.map(mod => <span key={mod} className={styles.pill}>{mod}</span>)}
             </div>
-            <button 
-              className={styles.btn} 
+            <button
+              className={styles.btn}
               onClick={() => handleClick(senior.id)}
               disabled={sentIds.has(senior.id)}
               style={sentIds.has(senior.id) ? { opacity: 0.6, cursor: 'not-allowed' } : {}}

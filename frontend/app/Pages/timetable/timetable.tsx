@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import styles from './timetable.module.css'; 
-
+import { getCurrentSemesterWeek } from '~/utils';
 import { type Assignment } from '../../types';
 import { getProfile, getFriends, getPendingRequests, getInbox } from '../../hooks';
 
@@ -117,7 +117,7 @@ function Timetable() {
 
   const numModules = uniqueModules.length;
 
-  const currentWeek = 'W0'; 
+  const currentWeek = `W${getCurrentSemesterWeek()}`;
   const thisWeekCount = assignments.filter(
     task => task.deadline.toUpperCase() === currentWeek.toUpperCase()
   ).length;
@@ -147,11 +147,11 @@ function Timetable() {
         <div className={styles['topbar-title']}>
           SyllaBuddy
         </div>
-        <div style={{gap: '12px' ,display: 'flex'}}>
-          <button className={styles['logout-btn']} onClick={handleLogout}>
-          Sign out
-          </button>
-        </div>
+        <div style={{gap: '12px', display: 'flex', alignItems: 'center'}}>
+            <button className="nav-btn-global" onClick={handleLogout}>
+              Sign out
+            </button>
+          </div>
       </div>
 
       <div className={styles['layout-container']}>
@@ -294,6 +294,31 @@ function Timetable() {
                 ))
               ) : (
                 <p style={{fontSize: '12px', color: '#94a3b8'}}>No conversations yet.</p>
+              )}
+            </div>
+          </div>
+          <div className={styles['sidebar-section']}>
+            <button className={styles['sidebar-header']} onClick={() => navigate("/forum")}>Forum</button>
+            <div className={styles['sidebar-content']}>
+              {uniqueModules.length > 0 ? (
+                uniqueModules.map((code) => (
+                  <div
+                    key={code}
+                    className={styles['inbox-item']}
+                    onClick={() => navigate(`/forum/${code}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={styles['sidebar-avatar']} style={{ fontSize: '11px' }}>
+                      {code.slice(0, 2)}
+                    </div>
+                    <div className={styles['inbox-info']}>
+                      <div className={styles['inbox-name']}>{code}</div>
+                    </div>
+                    <span style={{ color: '#94a3b8', fontSize: '14px' }}>›</span>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: '12px', color: '#94a3b8' }}>Add modules to see forums.</p>
               )}
             </div>
           </div>
