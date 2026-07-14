@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  
     ALGORITHM: str = "HS256"
-    GEMINI_API_KEY: str
+    GEMINI_API_KEY: str | None = None
 
     class Config:
         env_file = ".env"

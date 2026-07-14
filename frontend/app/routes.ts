@@ -1,5 +1,4 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes"; 
-import Social from "./Pages/social/social";
 
 export default [
     index("Pages/homePage/home.tsx"),
