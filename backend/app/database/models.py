@@ -1,6 +1,7 @@
 from app.database.database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY 
 from datetime import datetime
 
 class User(Base):
@@ -29,8 +30,8 @@ class UserProfile(Base):
     major = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     bio = Column(String, nullable=True)
-    modulesTaken = Column(String, nullable=True)
-    modulesToTake = Column(String, nullable=True)
+    modulesTaken = Column(ARRAY(String), nullable=True, default=list)
+    modulesToTake = Column(ARRAY(String), nullable=True, default=list)
     
     user = relationship("User", back_populates = "profile")
     
