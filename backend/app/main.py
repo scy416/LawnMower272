@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 
+from app.database.database import engine, Base
+from app.database import models
+
 from app.auth.aExceptions import invalid_email_format
 
 from app.auth.authMain import router as auth_router
@@ -14,6 +17,8 @@ from app.social.inbox import router as inbox_router
 from app.chatbot.chatbotMain import router as chatbot_router
 from app.forum.forumMain import router as forum_router
 
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

@@ -8,6 +8,6 @@ def build_profile_response(user: User) -> ProfileResponse:
         major=user.profile.major,
         year=user.profile.year,
         bio=user.profile.bio,
-        modulesTaken=user.profile.modulesTaken.split(",") if user.profile.modulesTaken else [],
-        modulesToTake=user.profile.modulesToTake.split(",") if user.profile.modulesToTake else []
+        modulesTaken=user.profile.modulesTaken or [],
+        modulesToTake=user.profile.modulesToTake or []
     )

@@ -100,3 +100,10 @@ class Notification(Base):
     body = Column(String, nullable=False)
     is_read = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class DiscoverCache(Base):
+    __tablename__ = 'discover_cache'
+
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    recommended_ids = Column(ARRAY(Integer), nullable=False, default=list)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

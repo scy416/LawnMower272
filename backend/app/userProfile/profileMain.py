@@ -23,8 +23,6 @@ def get_user_profile(user_id: int, current_user: User = Depends(get_current_user
 @router.patch("/me", response_model = ProfileResponse, status_code= status.HTTP_200_OK)
 def update_profile(updated_data: ProfileUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     for field, value in updated_data.model_dump(exclude_unset=True).items():
-        if field in ["modulesTaken", "modulesToTake"] and value is not None:
-            value = ",".join(value)
         setattr(current_user.profile, field, value)
 
     db.commit()
