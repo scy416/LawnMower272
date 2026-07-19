@@ -6,8 +6,8 @@
 export function getCurrentSemesterWeek(): number {
   const today = new Date();
   const year = today.getFullYear();
-  const sem1Start = new Date(year, 7, 10); // Aug 10
-  const sem2Start = new Date(year, 0, 11); // Jan 11
+  const sem1Start = new Date(year, 7, 10);
+  const sem2Start = new Date(year, 0, 11);
 
   let start: Date;
   if (today >= sem1Start) {
@@ -15,7 +15,6 @@ export function getCurrentSemesterWeek(): number {
   } else if (today >= sem2Start) {
     start = sem2Start;
   } else {
-    // Jan 1-10, still finishing off the previous Sem 1
     start = new Date(year - 1, 7, 10);
   }
 

@@ -10,7 +10,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import ChatbotWidget from "./Components/ChatbotWidget";
-import NotificationBell from "./Components/NotificationBell";
+
 
 export const links: Route.LinksFunction = () => [
   {
@@ -41,7 +41,7 @@ export default function App() {
   return (
     <>
       <Outlet />
-      <NotificationBell />
+
       <ChatbotWidget />
     </>
   );

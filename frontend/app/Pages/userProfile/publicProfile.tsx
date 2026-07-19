@@ -15,12 +15,13 @@ interface PublicProfileData {
 export default function PublicProfile() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const { getToken } = userAuth();
+  const { getToken, getUserId } = userAuth();
 
   const [profile, setProfile] = useState<PublicProfileData | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [friendRequested, setFriendRequested] = useState(false);
+  const isOwnProfile = String(getUserId()) === userId;
 
   useEffect(() => {
     const load = async () => {
@@ -65,26 +66,28 @@ export default function PublicProfile() {
   return (
     <div className={styles["card"]}>
       <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginBottom: "16px" }}>
-        {isFriend ? (
-          <button
-            className={styles["home-btn"]}
-            disabled
-            style={{ background: "#94a3b8", cursor: "not-allowed" }}
-          >
-            Already friends!
-          </button>
-        ) : friendRequested ? (
-          <button
-            className={styles["home-btn"]}
-            disabled
-            style={{ background: "#94a3b8", cursor: "not-allowed" }}
-          >
-            Request Sent
-          </button>
-        ) : (
-          <button className={styles["home-btn"]} onClick={handleAddFriend}>
-            Add Friend
-          </button>
+        {!isOwnProfile && (
+          isFriend ? (
+            <button
+              className={styles["home-btn"]}
+              disabled
+              style={{ background: "#94a3b8", cursor: "not-allowed" }}
+            >
+              Already friends!
+            </button>
+          ) : friendRequested ? (
+            <button
+              className={styles["home-btn"]}
+              disabled
+              style={{ background: "#94a3b8", cursor: "not-allowed" }}
+            >
+              Request Sent
+            </button>
+          ) : (
+            <button className={styles["home-btn"]} onClick={handleAddFriend}>
+              Add Friend
+            </button>
+          )
         )}
         <button onClick={() => navigate(-1)} className={styles["home-btn"]}>
           Back
