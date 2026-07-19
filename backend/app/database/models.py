@@ -40,7 +40,7 @@ class UserProfile(Base):
         secondaryjoin = (user_id == friends_table.c.friend_profile_id)
     )
 
-
+#TODO make a middleman module parent table
 class UserModule(Base):
     __tablename__ = 'user_modules'
 
@@ -49,6 +49,14 @@ class UserModule(Base):
     module_code = Column(String, nullable=False, index=True)
 
     user = relationship("User", back_populates="modules")
+
+class Assignment(Base):
+    __tablename__ = 'assignments'
+
+    id = Column(Integer, primary_key=True, index=True)
+    module_code = Column(String, nullable=False, index=True) 
+    assignment_name = Column(String, nullable=False)
+    deadline = Column(String, nullable=False) 
 
 class FriendRequest(Base):
     __tablename__ = 'friend_requests'

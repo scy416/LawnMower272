@@ -4,6 +4,7 @@ import styles from './timetable.module.css';
 import { getCurrentSemesterWeek } from '~/utils';
 import { type Assignment } from '../../types';
 import { getProfile, getFriends, getPendingRequests, getInbox } from '../../hooks';
+import ModuleSearch from './moduleSearch';
 
 function Timetable() {
   const navigate = useNavigate();
@@ -47,11 +48,11 @@ function Timetable() {
         }
       });
       if (response.ok) {
-        setAssignments(assignments.filter(task => task.module !== moduleCode));
+        setAssignments(assignments.filter(task => task.module_code !== moduleCode));;
       }
     } catch (error) {
       console.error("Error removing module:", error);
-      setAssignments(assignments.filter(task => task.module !== moduleCode));
+      setAssignments(assignments.filter(task => task.module_code !== moduleCode));
     }
   };
 
@@ -84,7 +85,30 @@ function Timetable() {
       .catch(error => console.error("Error fetching data:", error));
   }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddModule = async (moduleCode: string) => {
+  try {
+    const token = localStorage.getItem("access_token");
+    const response = await fetch('http://localhost:8000/api/modules', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      // Pass the code we received from the child component!
+      body: JSON.stringify({ module_code: moduleCode }), 
+    });
+
+    if (response.ok) {
+      const newModuleAssignments: Assignment[] = await response.json();
+      const existingIds = new Set(assignments.map(a => a.id));
+      const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
+      setAssignments([...assignments, ...filteredNew]);
+    }
+  } catch (error) {
+    console.error("Error adding module:", error);
+  }
+};
+  /* const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 
     try {
       const token = localStorage.getItem("access_token");
@@ -109,9 +133,9 @@ function Timetable() {
     } catch (error) {
       console.error("Error adding module:", error);
     }
-  };
+  }; */
 
-  const uniqueModules = Array.from(new Set(assignments.map(task => task.module)));
+  const uniqueModules = Array.from(new Set(assignments.map(task => task.module_code)));
 
   const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12', 'W13'];
 
@@ -157,20 +181,8 @@ function Timetable() {
       <div className={styles['layout-container']}>
 
         <div className={styles['dashboard-container']}>
-          
-
-
-        <form onSubmit={handleSubmit} className={styles['module-form']}>
-          <input 
-            type="text" 
-            placeholder="Enter Module Code" 
-            value={moduleInput} 
-            onChange={(e) => setModuleInput(e.target.value)} 
-            required 
-            className={styles['module-input']}
-          />
-          <button type="submit" className={styles['btn-add']}>Add Module</button>
-        </form>
+        
+        <ModuleSearch onAddModule={handleAddModule} />
 
         <div className={styles.summary}>
           
@@ -219,7 +231,7 @@ function Timetable() {
 
                 {weeks.map(week => {
                   const tasksInWeek = assignments.filter(
-                    task => task.module === moduleCode && task.deadline.toUpperCase() === week.toUpperCase()
+                    task => task.module_code === moduleCode && task.deadline.toUpperCase() === week.toUpperCase()
                   );
 
                   return (
