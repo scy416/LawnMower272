@@ -21,7 +21,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     """Upgrade schema."""
     op.add_column('messages', sa.Column('is_read', sa.Boolean(), nullable=True, server_default=sa.false()))
-    op.execute("UPDATE messages SET is_read = 0 WHERE is_read IS NULL")
+    op.execute("UPDATE messages SET is_read = FALSE WHERE is_read IS NULL")
 
 
 def downgrade() -> None:

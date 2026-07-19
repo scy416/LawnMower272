@@ -1,6 +1,7 @@
 from app.database.database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY 
 from datetime import datetime
 
 class User(Base):
@@ -29,8 +30,8 @@ class UserProfile(Base):
     major = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     bio = Column(String, nullable=True)
-    modulesTaken = Column(String, nullable=True)
-    modulesToTake = Column(String, nullable=True)
+    modulesTaken = Column(ARRAY(String), nullable=True, default=list)
+    modulesToTake = Column(ARRAY(String), nullable=True, default=list)
     
     user = relationship("User", back_populates = "profile")
     
@@ -39,7 +40,7 @@ class UserProfile(Base):
         secondaryjoin = (user_id == friends_table.c.friend_profile_id)
     )
 
-
+#TODO make a middleman module parent table
 class UserModule(Base):
     __tablename__ = 'user_modules'
 
@@ -48,6 +49,14 @@ class UserModule(Base):
     module_code = Column(String, nullable=False, index=True)
 
     user = relationship("User", back_populates="modules")
+
+class Assignment(Base):
+    __tablename__ = 'assignments'
+
+    id = Column(Integer, primary_key=True, index=True)
+    module_code = Column(String, nullable=False, index=True) 
+    assignment_name = Column(String, nullable=False)
+    deadline = Column(String, nullable=False) 
 
 class FriendRequest(Base):
     __tablename__ = 'friend_requests'
@@ -99,3 +108,10 @@ class Notification(Base):
     body = Column(String, nullable=False)
     is_read = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class DiscoverCache(Base):
+    __tablename__ = 'discover_cache'
+
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    recommended_ids = Column(ARRAY(Integer), nullable=False, default=list)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -1,6 +1,6 @@
 export interface Assignment {
   id: number;
-  module: string;
+  module_code: string;
   assignment_name: string;
   deadline: string;
 }

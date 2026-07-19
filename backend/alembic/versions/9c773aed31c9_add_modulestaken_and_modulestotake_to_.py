@@ -33,12 +33,6 @@ def upgrade() -> None:
         with op.batch_alter_table('user_profiles') as batch_op:
             batch_op.add_column(sa.Column('modulesTaken', sa.String(), nullable=True))
             batch_op.add_column(sa.Column('modulesToTake', sa.String(), nullable=True))
-            try:
-                batch_op.drop_column('name')
-            except Exception:
-                pass
-        op.create_index(op.f('ix_friend_requests_receiver_id'), 'friend_requests', ['receiver_id'], unique=False)
-        op.create_index(op.f('ix_friend_requests_sender_id'), 'friend_requests', ['sender_id'], unique=False)
     # SQLite (local dev): schema already correct, nothing to do
 
 
@@ -53,4 +47,3 @@ def downgrade() -> None:
         with op.batch_alter_table('user_profiles') as batch_op:
             batch_op.drop_column('modulesTaken')
             batch_op.drop_column('modulesToTake')
-            batch_op.add_column(sa.Column('name', sa.VARCHAR(), nullable=True))

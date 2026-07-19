@@ -3,13 +3,14 @@ from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 
-from app.database.models import User, UserProfile, Conversation
+from app.database.models import User, UserProfile, Conversation, DiscoverCache
 from app.database.database import get_db
 from app.auth.dependencies import get_current_user
 from app.social.socialClasses import ConversationResponse
 
 from app.userProfile.friends.friendsMain import is_friend
 import app.social.scExceptions as exceptions
+from app.social.algo import compute_daily_recommendations
 
 router = APIRouter(prefix="/social", tags=['social'])
 
@@ -49,7 +50,6 @@ def make_or_get_conversation(target_user_id: int, current_user: User = Depends(g
         "acceptor_id": new_conversation.acceptor_id
     }
 
-@router.get("/discover")
 def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     friend_profiles = current_user.profile.friends
     friend_ids = {fp.user_id for fp in friend_profiles}
@@ -69,7 +69,43 @@ def get_all_other_users(current_user: User = Depends(get_current_user), db: Sess
             "year": profile.year or 3,
             "major": profile.major or "Undeclared",
             "bio": profile.bio or "No bio provided.",
-            "modules": profile.modulesTaken.split(",") if profile.modulesTaken else [],
+            "modules": profile.modulesTaken or [],
         })
 
     return results
+
+@router.get("/discover")
+def get_top_matches(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    cache = db.query(DiscoverCache).filter(
+        DiscoverCache.user_id == current_user.id
+    ).first()
+
+    if not cache or not cache.recommended_ids:
+        return get_all_other_users(current_user = current_user, db = db)
+
+
+    match_profiles = db.query(UserProfile).filter(
+        UserProfile.user_id.in_(cache.recommended_ids)
+    ).all()
+
+    results = []
+    profile_dict = {p.user_id: p for p in match_profiles}
+    
+    for match_id in cache.recommended_ids:
+        if match_id in profile_dict:
+            p = profile_dict[match_id]
+            results.append({
+                "id": p.user_id,
+                "name": p.user.username,
+                "year": p.year or 3,
+                "major": p.major or "Undeclared",
+                "bio": p.bio or "No bio provided.",
+                "modules": p.modulesTaken or [],
+            })
+
+    return results
+
+@router.post("/admin/force-recalculate") #For testing
+def force_recalculate(current_user: User = Depends(get_current_user)):
+    compute_daily_recommendations()
+    return {"message": "Recommendation Engine triggered successfully."}
