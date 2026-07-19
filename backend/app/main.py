@@ -18,7 +18,7 @@ from app.chatbot.chatbotMain import router as chatbot_router
 from app.forum.forumMain import router as forum_router
 
 
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine) //this allows fastapi to create tables, we let alembic do the work instead
 
 app = FastAPI()
 
