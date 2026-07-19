@@ -8,54 +8,73 @@ fake = Faker()
 MAJORS = ["Computer Science", "Information Systems", "Business Analytics", "Information Security", "Computer Engineering"]
 
 MODULE_POOL = [
+    # Core CS
     "CS1010S", "CS1101S", "CS1231S", "CS2030S", "CS2040S",
-    "CS2100", "CS2101", "CS2103T", "CS2105", "CS2106", 
-    "CS2109S", "CS3230", "CS3243", "CS3244", "CS4231", 
-    "IS1108", "IS2218", "IS3103", "BT1101", "BT2102", 
-    "CP2106", "MA1521", "ST2334"
+    "CS2100", "CS2101", "CS2103T", "CS2105", "CS2106",
+    "CS2109S", "CS3230", "CS3243", "CS3244", "CS4231",
+    # Algorithms & Theory
+    "CS3236", "CS4232", "CS4261", "CS5230", "CS5234",
+    # Systems
+    "CS2102", "CS3219", "CS4218", "CS4224", "CS4225",
+    # AI & Data
+    "CS3264", "CS4243", "CS4248", "CS5228", "CS5340",
+    # Networks & Security
+    "CS2107", "CS3235", "CS4236", "CS5321", "CS5331",
+    # HCI & Graphics
+    "CS3240", "CS3247", "CS4240", "CS4247", "CS4350",
+    # IS Modules
+    "IS1108", "IS2218", "IS3103", "IS4100", "IS4151",
+    # Business Analytics
+    "BT1101", "BT2102", "BT3102", "BT4222", "BT4240",
+    # Math & Stats
+    "MA1521", "MA1522", "ST2334", "ST3131", "ST4234",
+    # Breadth / CP
+    "CP2106", "CP3106", "CP3209",
 ]
 
-ASSIGNMENT_BASES = ["Tutorial", "Lab", "Mission", "Quiz", "Problem Set"]
-ONE_OFF_ASSIGNMENTS = ["Midterm Assessment", "Final Project Proposal", "Final Project", "Peer Review"]
-
-#Print statements for my own debugging
+# Print statements for my own debugging
 def seed_database(num_users=100):
     db = SessionLocal()
-    
-    try:
-        #print("Seeding Global Assignments for all modules...")
 
+    try:
         for mod in MODULE_POOL:
-            num_assignments = random.randint(3, 7) 
-            deadlines = random.sample(range(2, 14), num_assignments)
-            deadlines.sort()
-            
-            for i, week in enumerate(deadlines):
-                if i == num_assignments - 1:
-                    name = random.choice(ONE_OFF_ASSIGNMENTS)
-                else:
-                    base = random.choice(ASSIGNMENT_BASES)
-                    name = f"{base} {i+1}"
-                    
+            # Random "Assignment N" on random weeks (excluding W7 and W13)
+            available_weeks = [w for w in range(2, 13) if w != 7]
+            num_assignments = random.randint(3, 6)
+            assignment_weeks = sorted(random.sample(available_weeks, num_assignments))
+
+            for i, week in enumerate(assignment_weeks):
                 new_assignment = Assignment(
                     module_code=mod,
-                    assignment_name=name,
+                    assignment_name=f"Assignment {i + 1}",
                     deadline=f"W{week}"
                 )
                 db.add(new_assignment)
-        
-        db.commit()
-        #print("Global Assignments successfully seeded!")
 
-        #print(f"Generating {num_users} fake users...")
+            # Every module gets Mid-Term on W7
+            db.add(Assignment(
+                module_code=mod,
+                assignment_name="Mid-Term",
+                deadline="W7"
+            ))
+
+            # Every module gets Final Examination on W13
+            db.add(Assignment(
+                module_code=mod,
+                assignment_name="Final Examination",
+                deadline="W13"
+            ))
+
+        db.commit()
+
         for _ in range(num_users):
             new_user = User(
                 username=fake.unique.user_name(),
                 email=fake.unique.email(),
-                hashed_password="fakehashedpassword123" 
+                hashed_password="fakehashedpassword123"
             )
             db.add(new_user)
-            db.commit() 
+            db.commit()
             db.refresh(new_user)
 
             taken_count = random.randint(2, 6)
@@ -69,7 +88,7 @@ def seed_database(num_users=100):
                 major=random.choice(MAJORS),
                 year=random.randint(1, 4),
                 bio=fake.sentence(),
-                modulesTaken=modules_taken, 
+                modulesTaken=modules_taken,
                 modulesToTake=modules_to_take
             )
             db.add(new_profile)

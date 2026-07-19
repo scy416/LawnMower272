@@ -33,30 +33,20 @@ export default function ForumHome() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (forumRes.status === 401) {
-          handleUnauthorized();
-          return;
-        }
-
-        if (forumRes.ok) {
-          const data = await forumRes.json();
-          setAllModules(data);
-        }
+        if (forumRes.status === 401) { handleUnauthorized(); return; }
+        if (forumRes.ok) setAllModules(await forumRes.json());
 
         const timetableRes = await fetch("http://localhost:8000/api/timetable", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (timetableRes.status === 401) {
-          handleUnauthorized();
-          return;
-        }
+        if (timetableRes.status === 401) { handleUnauthorized(); return; }
 
         if (timetableRes.ok) {
           const assignments: any[] = await timetableRes.json();
           const codes: string[] = [];
           assignments.forEach((a) => {
-            if (!codes.includes(a.module)) codes.push(a.module);
+            if (!codes.includes(a.module_code)) codes.push(a.module_code);
           });
           setUserModules(codes);
         }
@@ -76,14 +66,37 @@ export default function ForumHome() {
 
   const searchTrimmed = search.trim().toUpperCase();
 
-  const displayModules: { code: string; info?: ModuleInfo }[] = searchTrimmed
-    ? allModules
-        .filter((m) => m.module_code.includes(searchTrimmed))
-        .map((m) => ({ code: m.module_code, info: m }))
+  // users can review modules not added to their timetable
+  const filtered = allModules.filter((m) => m.module_code.includes(searchTrimmed));
+  const displayModules = searchTrimmed
+    ? filtered.length > 0
+      ? filtered.map((m) => ({ code: m.module_code, info: m }))
+      : [{ code: searchTrimmed, info: undefined }]
     : userModules.map((code) => ({
         code,
         info: allModules.find((m) => m.module_code === code),
       }));
+
+  const ModuleRow = ({ code, info }: { code: string; info?: ModuleInfo }) => (
+    <div className={styles["module-row"]} onClick={() => navigate(`/forum/${code}`)}>
+      <span className={styles["module-code"]}>{code}</span>
+      <div className={styles["module-meta"]}>
+        {info ? (
+          <>
+            <span className={styles["avg-stars"]}>
+              {renderStars(info.avg_rating)} {info.avg_rating.toFixed(1)}
+            </span>
+            <span className={styles["review-count"]}>
+              {info.review_count} review{info.review_count !== 1 ? "s" : ""}
+            </span>
+          </>
+        ) : (
+          <span className={styles["review-count"]}>No reviews yet</span>
+        )}
+        <span style={{ color: "#94a3b8", fontSize: "16px" }}>›</span>
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.page}>
@@ -102,9 +115,7 @@ export default function ForumHome() {
 
         <div className={styles["page-header"]}>
           <div className={styles["page-title"]}>Module Forum</div>
-          <div className={styles["page-subtitle"]}>
-            Browse reviews and ratings for NUS modules.
-          </div>
+          <div className={styles["page-subtitle"]}>Browse reviews and ratings for NUS modules.</div>
         </div>
 
         <div className={styles["search-wrap"]}>
@@ -134,28 +145,7 @@ export default function ForumHome() {
             ) : (
               <div className={styles["module-list"]}>
                 {displayModules.map(({ code, info }) => (
-                  <div
-                    key={code}
-                    className={styles["module-row"]}
-                    onClick={() => navigate(`/forum/${code}`)}
-                  >
-                    <span className={styles["module-code"]}>{code}</span>
-                    <div className={styles["module-meta"]}>
-                      {info ? (
-                        <>
-                          <span className={styles["avg-stars"]}>
-                            {renderStars(info.avg_rating)} {info.avg_rating.toFixed(1)}
-                          </span>
-                          <span className={styles["review-count"]}>
-                            {info.review_count} review{info.review_count !== 1 ? "s" : ""}
-                          </span>
-                        </>
-                      ) : (
-                        <span className={styles["review-count"]}>No reviews yet</span>
-                      )}
-                      <span style={{ color: "#94a3b8", fontSize: "16px" }}>›</span>
-                    </div>
-                  </div>
+                  <ModuleRow key={code} code={code} info={info} />
                 ))}
               </div>
             )}
@@ -167,34 +157,14 @@ export default function ForumHome() {
                 </div>
                 <div className={styles["module-list"]}>
                   {userModules
-                    .filter((c) => c.includes(searchTrimmed) === false)
-                    .map((code) => {
-                      const info = allModules.find((m) => m.module_code === code);
-                      return (
-                        <div
-                          key={code}
-                          className={styles["module-row"]}
-                          onClick={() => navigate(`/forum/${code}`)}
-                        >
-                          <span className={styles["module-code"]}>{code}</span>
-                          <div className={styles["module-meta"]}>
-                            {info ? (
-                              <>
-                                <span className={styles["avg-stars"]}>
-                                  {renderStars(info.avg_rating)} {info.avg_rating.toFixed(1)}
-                                </span>
-                                <span className={styles["review-count"]}>
-                                  {info.review_count} review{info.review_count !== 1 ? "s" : ""}
-                                </span>
-                              </>
-                            ) : (
-                              <span className={styles["review-count"]}>No reviews yet</span>
-                            )}
-                            <span style={{ color: "#94a3b8", fontSize: "16px" }}>›</span>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    .filter((c) => !c.includes(searchTrimmed))
+                    .map((code) => (
+                      <ModuleRow
+                        key={code}
+                        code={code}
+                        info={allModules.find((m) => m.module_code === code)}
+                      />
+                    ))}
                 </div>
               </>
             )}
