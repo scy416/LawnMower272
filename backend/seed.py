@@ -1,3 +1,4 @@
+#Script to generate random data in database
 import random
 from faker import Faker
 from app.database.database import SessionLocal

@@ -40,23 +40,36 @@ class UserProfile(Base):
         secondaryjoin = (user_id == friends_table.c.friend_profile_id)
     )
 
-#TODO make a middleman module parent table
+class Module(Base):
+    __tablename__ = 'modules'
+
+    code = Column(String, primary_key=True, index=True)
+    name = Column(String, nullable=True) 
+
+    enrollments = relationship("UserModule", back_populates="module")
+    assignments = relationship("Assignment", back_populates="module")
+    reviews = relationship("ModuleReview", back_populates="module")
+
 class UserModule(Base):
     __tablename__ = 'user_modules'
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    module_code = Column(String, nullable=False, index=True)
+    module_code = Column(String, ForeignKey('modules.code', ondelete='CASCADE'), nullable=False, index=True)
 
     user = relationship("User", back_populates="modules")
+    module = relationship("Module", back_populates="enrollments")
+
 
 class Assignment(Base):
     __tablename__ = 'assignments'
 
     id = Column(Integer, primary_key=True, index=True)
-    module_code = Column(String, nullable=False, index=True) 
+    module_code = Column(String, ForeignKey('modules.code', ondelete='CASCADE'), nullable=False, index=True) 
     assignment_name = Column(String, nullable=False)
     deadline = Column(String, nullable=False) 
+
+    module = relationship("Module", back_populates="assignments")
 
 class FriendRequest(Base):
     __tablename__ = 'friend_requests'
@@ -91,12 +104,13 @@ class ModuleReview(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     author_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True)
-    module_code = Column(String, nullable=False, index=True)
+    module_code = Column(String, ForeignKey('modules.code', ondelete='CASCADE'), nullable=False, index=True)
     rating = Column(Integer, nullable=False)  # 1-5
     comment = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     author = relationship("User")
+    module = relationship("Module", back_populates="reviews")
 
 
 class Notification(Base):

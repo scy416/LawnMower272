@@ -21,23 +21,6 @@ function Timetable() {
     navigate("/");
   };
 
-  const handleStartChat = async (targetUserId: number) => {
-    const token = localStorage.getItem("access_token");
-    if (!token) return;
-    try {
-      const res = await fetch(`http://localhost:8000/social/chat/${targetUserId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        navigate(`/chat/${data.conversation_id}`);
-      }
-    } catch (err) {
-      console.error("Failed to start chat:", err);
-    }
-  };
-
   const handleRemoveModule = async (moduleCode: string) => {
     try {
       const token = localStorage.getItem("access_token");
@@ -108,32 +91,6 @@ function Timetable() {
     console.error("Error adding module:", error);
   }
 };
-  /* const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-    try {
-      const token = localStorage.getItem("access_token");
-      const response = await fetch('http://localhost:8000/api/modules', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ module_code: moduleInput }),
-      });
-
-      if (response.ok) {
-        const newModuleAssignments: Assignment[] = await response.json();
-        
-        const existingIds = new Set(assignments.map(a => a.id));
-        const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
-        
-        setAssignments([...assignments, ...filteredNew]);
-        setModuleInput('');
-      }
-    } catch (error) {
-      console.error("Error adding module:", error);
-    }
-  }; */
 
   const uniqueModules = Array.from(new Set(assignments.map(task => task.module_code)));
 
