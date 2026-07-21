@@ -10,7 +10,7 @@ from app.social.socialClasses import ConversationResponse
 
 from app.userProfile.friends.friendsMain import is_friend
 import app.social.scExceptions as exceptions
-from app.social.algo import compute_daily_recommendations
+from app.social.recoAlgo import compute_daily_recommendations
 
 router = APIRouter(prefix="/social", tags=['social'])
 
@@ -51,15 +51,17 @@ def make_or_get_conversation(target_user_id: int, current_user: User = Depends(g
     }
 
 def get_all_other_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    friend_profiles = current_user.profile.friends
-    friend_ids = {fp.user_id for fp in friend_profiles}
-    friend_ids.add(current_user.id)
+    friend_ids = {current_user.id}
+    if current_user.profile:
+        friend_profiles = current_user.profile.friends
+        for fp in friend_profiles:
+            friend_ids.add(fp.user_id)
 
     other_profiles = db.query(UserProfile).filter(
         UserProfile.user_id.notin_(friend_ids)
     ).all()
 
-    sample = random.sample(other_profiles, min(3, len(other_profiles)))
+    sample = random.sample(other_profiles, min(10, len(other_profiles)))
 
     results = []
     for profile in sample:
@@ -105,7 +107,29 @@ def get_top_matches(current_user: User = Depends(get_current_user), db: Session 
 
     return results
 
-@router.post("/admin/force-recalculate") #For testing
+@router.post("/admin/force-recalculate") #For testing of recoAlgo.py in swagger
 def force_recalculate(current_user: User = Depends(get_current_user)):
     compute_daily_recommendations()
     return {"message": "Recommendation Engine triggered successfully."}
+
+@router.get("/api/search/profiles")
+def search_full_profiles(q: str, db: Session = Depends(get_db)):
+    if not q:
+        return []
+
+    matches = db.query(User).filter(User.username.ilike(f"%{q}%")).limit(20).all()
+    
+    results = []
+    for user in matches:
+        if user.profile:
+            p = user.profile
+            results.append({
+                "id": p.user_id,
+                "name": p.user.username,
+                "year": p.year or 3,
+                "major": p.major or "Undeclared",
+                "bio": p.bio or "No bio provided.",
+                "modules": p.modulesTaken or [],
+            })
+            
+    return results

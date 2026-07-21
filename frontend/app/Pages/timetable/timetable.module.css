@@ -430,3 +430,8 @@
 .social-btn:hover {
   background: #f1f5f9;
 }
+
+.search-container {
+  max-width: 300px;
+  margin-left: auto;
+}

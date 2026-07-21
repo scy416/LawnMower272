@@ -4,7 +4,7 @@ import styles from './timetable.module.css';
 import { getCurrentSemesterWeek } from '~/utils';
 import { type Assignment } from '../../types';
 import { getProfile, getFriends, getPendingRequests, getInbox } from '../../hooks';
-import ModuleSearch from './moduleSearch';
+import SearchBar from '../../Components/searchBox';
 
 function Timetable() {
   const navigate = useNavigate();
@@ -69,29 +69,36 @@ function Timetable() {
   }, [navigate]);
 
   const handleAddModule = async (moduleCode: string) => {
-  try {
-    const token = localStorage.getItem("access_token");
-    const response = await fetch('http://localhost:8000/api/modules', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      // Pass the code we received from the child component!
-      body: JSON.stringify({ module_code: moduleCode }), 
-    });
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch('http://localhost:8000/api/modules', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ module_code: moduleCode }), 
+      });
 
-    if (response.ok) {
-      const newModuleAssignments: Assignment[] = await response.json();
-      const existingIds = new Set(assignments.map(a => a.id));
-      const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
-      setAssignments([...assignments, ...filteredNew]);
+      if (response.ok) {
+        const newModuleAssignments: Assignment[] = await response.json();
+        const existingIds = new Set(assignments.map(a => a.id));
+        const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
+        setAssignments([...assignments, ...filteredNew]);
+      }
+    } catch (error) {
+      console.error("Error adding module:", error);
     }
-  } catch (error) {
-    console.error("Error adding module:", error);
-  }
-};
+  }; 
 
+  const fetchModuleSuggestions = async (query: string): Promise<string[]> => {
+    const token = localStorage.getItem("access_token");
+    const res = await fetch(`http://localhost:8000/api/search/modules?q=${query}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  };
   const uniqueModules = Array.from(new Set(assignments.map(task => task.module_code)));
 
   const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12', 'W13'];
@@ -139,7 +146,12 @@ function Timetable() {
 
         <div className={styles['dashboard-container']}>
         
-        <ModuleSearch onAddModule={handleAddModule} />
+        <SearchBar placeholder="Enter Module Code" buttonText="Add Module" onSelect={handleAddModule} fetchSuggestions={fetchModuleSuggestions} 
+          containerClassName={styles['search-container']}
+          formClassName={styles['module-form']} 
+          inputClassName={styles['module-input']} 
+          buttonClassName={styles['btn-add']}
+        />
 
         <div className={styles.summary}>
           

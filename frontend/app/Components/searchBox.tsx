@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-interface GenericSearchProps {
+interface SearchBoxProps {
   placeholder: string;
   buttonText: string;
   onSelect: (value: string) => void;
@@ -9,9 +9,14 @@ interface GenericSearchProps {
   formClassName?: string;
   inputClassName?: string;
   buttonClassName?: string;
+  icon?: React.ReactNode;
+  iconClassName?: string;
+  inputWrapperClassName?: string;
+  hideDropdown?: boolean; 
+  onInputChange?: (value: string) => void;
 }
 
-export default function GenericSearch({ 
+export default function SearchBox({ 
   placeholder, 
   buttonText, 
   onSelect, 
@@ -19,8 +24,13 @@ export default function GenericSearch({
   containerClassName = "",
   formClassName = "",
   inputClassName = "",
-  buttonClassName = ""
-}: GenericSearchProps) {
+  buttonClassName = "",
+  icon,
+  iconClassName = "",
+  inputWrapperClassName = "",
+  hideDropdown,
+  onInputChange,
+}: SearchBoxProps) {
   
   const [inputValue, setInputValue] = useState<string>('');
   const [results, setResults] = useState<string[]>([]);
@@ -33,7 +43,7 @@ export default function GenericSearch({
       return;
     }
 
-    const delayDebounceFn = setTimeout(async () => {
+    const delay = setTimeout(async () => {
       try {
         const data = await fetchSuggestions(inputValue);
         setResults(data);
@@ -43,7 +53,7 @@ export default function GenericSearch({
       }
     }, 300);
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => clearTimeout(delay);
   }, [inputValue, fetchSuggestions]);
 
   const handleSelect = (item: string) => {
@@ -60,24 +70,30 @@ export default function GenericSearch({
   };
 
   return (
-    <div className={containerClassName} style={{ position: 'relative', width: '100%', maxWidth: '400px', marginLeft: 'auto' }}>
+    <div className={containerClassName} style={{ position: 'relative', width: '100%'}}>
       <form onSubmit={submitForm} className={formClassName}>
-        <input 
-          type="text" 
-          placeholder={placeholder} 
-          value={inputValue} 
-          onChange={(e) => setInputValue(e.target.value)} 
-          onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 150)} 
-          required 
-          className={inputClassName}
-        />
+        <div className={inputWrapperClassName} style={inputWrapperClassName ? {} : { flex: 1, width: '100%' }}>
+          {icon && <span className={iconClassName}>{icon}</span>}
+          <input 
+            type="text" 
+            placeholder={placeholder} 
+            value={inputValue} 
+            onChange={(e) => {
+            setInputValue(e.target.value);
+            if (onInputChange) onInputChange(e.target.value); 
+            }}
+            onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 150)} 
+            required 
+            className={inputClassName}
+          />
+        </div>
         <button type="submit" className={buttonClassName}>
           {buttonText}
         </button>
       </form>
-      
-      {showDropdown && results.length > 0 && (
+
+      {!hideDropdown && showDropdown && results.length > 0 && (
         <ul style={{
           position: 'absolute', top: '100%', left: 0, right: '100px',
           backgroundColor: 'white', border: '1px solid #e2e8f0',

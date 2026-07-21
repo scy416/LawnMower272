@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link,useNavigate } from "react-router";
 import styles from "./signUp.module.css";
 
 export default function Login() {
@@ -83,6 +83,8 @@ export default function Login() {
             >
               {loading ? "Logging in…" : "Log in"}
             </button>
+
+            <Link to="/signup" className={`${styles.btn} ${styles['btn-secondary']}`}>Sign up</Link>
           </div>
 
         </div>

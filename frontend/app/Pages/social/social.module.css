@@ -229,3 +229,66 @@
 .grey-btn:hover {
   background: #f1f5f9;
 }
+
+.sb-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.sb-form {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.sb-input {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.sb-input:focus {
+  border-color: #0b2d5a;
+}
+
+.sb-button {
+  padding: 10px 24px;
+  background-color: #0b2d5a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.sb-button:hover {
+  background-color: #082040;
+}
+
+.sb-input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.sb-icon {
+  position: absolute;
+  left: 16px;
+  top: 10px;
+  color: #94a3b8;
+}
+
+.sb-input {
+  width: 100%;
+  padding: 10px 16px 10px 44px; 
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
+}

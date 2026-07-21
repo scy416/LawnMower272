@@ -5,7 +5,7 @@ from scipy.sparse import csr_matrix
 from sqlalchemy.orm import Session
 
 from app.database.database import SessionLocal 
-from app.database.models import UserProfile, UserModule, DiscoverCache
+from app.database.models import UserProfile, UserModule, DiscoverCache, Module
 
 logging.basicConfig(
     filename='server.log',
@@ -29,8 +29,8 @@ def compute_daily_recommendations():
         user_id_to_index = {p.user_id: idx for idx, p in enumerate(profiles)}
         index_to_user_id = {idx: uid for uid, idx in user_id_to_index.items()}
 
-        distinct_modules = db.query(UserModule.module_code).distinct().all()
-        unique_modules = {row[0] for row in distinct_modules}
+        all_modules = db.query(Module.code).all()
+        unique_modules = {row[0] for row in all_modules}
         
         module_to_index = {mod: idx for idx, mod in enumerate(unique_modules)}
         num_users = len(profiles)
