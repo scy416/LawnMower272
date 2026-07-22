@@ -22,3 +22,14 @@ export function getCurrentSemesterWeek(): number {
   const week = Math.floor(days / 7) + 1;
   return week >= 1 && week <= 13 ? week : 0;
 }
+
+export const fetchModuleSuggestions = async (query: string, token: string | null): Promise<string[]> => {
+    if (!token) return [];
+    
+    const res = await fetch(`http://localhost:8000/api/search/modules?q=${query}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!res.ok) return [];
+    return await res.json();
+};

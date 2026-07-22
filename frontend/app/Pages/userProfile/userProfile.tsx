@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import styles from "./userProfile.module.css";
 import { getProfile, userAuth } from "../../hooks";
+import { ModuleSelector } from "~/Components/moduleSelector";
+import { fetchModuleSuggestions } from "~/utils";
 
 interface FormData {
     bio: string;
     major: string;
     year: string;
-    modulesTaken: string;
-    modulesToTake: string;
+    modulesTaken: string[];
+    modulesToTake: string[];
 }
 
 export default function UserProfile() {
@@ -20,8 +22,8 @@ export default function UserProfile() {
         bio: "",
         major: "",
         year: "",
-        modulesTaken: "",
-        modulesToTake: "",
+        modulesTaken: [],
+        modulesToTake: [],
     });
     
     const [saving, setSaving] = useState(false);
@@ -35,8 +37,8 @@ export default function UserProfile() {
                     bio: data.bio || "",
                     major: data.major || "",
                     year: data.year ? String(data.year) : "",
-                    modulesTaken: data.modulesTaken?.join(", ") || "",
-                    modulesToTake: data.modulesToTake?.join(", ") || "",
+                    modulesTaken: data.modulesTaken || [],
+                    modulesToTake: data.modulesToTake || [],
                 });
             }
         };
@@ -57,8 +59,8 @@ export default function UserProfile() {
         if (formData.bio) updatedFields.bio = formData.bio;
         if (formData.major) updatedFields.major = formData.major;
         if (formData.year) updatedFields.year = Number(formData.year);
-        if (formData.modulesTaken) updatedFields.modulesTaken = formData.modulesTaken.split(",").map((s) => s.trim()).filter(Boolean);
-        if (formData.modulesToTake) updatedFields.modulesToTake = formData.modulesToTake.split(",").map((s) => s.trim()).filter(Boolean);
+        updatedFields.modulesTaken = formData.modulesTaken;
+        updatedFields.modulesToTake = formData.modulesToTake;
 
         const res = await fetch("http://localhost:8000/profile/me", {
             method: "PATCH",
@@ -72,6 +74,22 @@ export default function UserProfile() {
             await loadProfileInfo();
             setTimeout(() => setSaved(false), 2000);
         }
+    };
+
+    const handleAddModule = (listName: "modulesTaken" | "modulesToTake", mod: string) => {
+        if (!mod) return;
+        setFormData(prev => {
+            // Prevent duplicates!
+            if (prev[listName].includes(mod)) return prev;
+            return { ...prev, [listName]: [...prev[listName], mod] };
+        });
+    };
+
+    const handleRemoveModule = (listName: "modulesTaken" | "modulesToTake", modToRemove: string) => {
+        setFormData(prev => ({
+            ...prev,
+            [listName]: prev[listName].filter(m => m !== modToRemove)
+        }));
     };
 
     if (!profile) return <p className={styles["muted"]}>Loading...</p>;
@@ -132,24 +150,22 @@ export default function UserProfile() {
                 </div>
 
                 <div className={styles["field"]}>
-                    <label className={styles["label"]}>Modules Taken</label>
-                    <input
-                        className={styles["input"]}
-                        name="modulesTaken"
-                        value={formData.modulesTaken}
-                        onChange={handleChange}
-                        placeholder="e.g. CS1101S, CS1231S"
+                    <ModuleSelector 
+                    label="Modules Taken"
+                    modules={formData.modulesTaken}
+                    onAdd={(val) => handleAddModule("modulesTaken", val)}
+                    onRemove={(val) => handleRemoveModule("modulesTaken", val)}
+                    fetchSuggestions={(query) => fetchModuleSuggestions(query, getToken())}
                     />
                 </div>
 
                 <div className={styles["field"]}>
-                    <label className={styles["label"]}>Modules to Take</label>
-                    <input
-                        className={styles["input"]}
-                        name="modulesToTake"
-                        value={formData.modulesToTake}
-                        onChange={handleChange}
-                        placeholder="e.g. CS2103T, CS2101"
+                    <ModuleSelector 
+                    label="Modules to Take"
+                    modules={formData.modulesToTake}
+                    onAdd={(val) => handleAddModule("modulesToTake", val)}
+                    onRemove={(val) => handleRemoveModule("modulesToTake", val)}
+                    fetchSuggestions={(query) => fetchModuleSuggestions(query, getToken())}
                     />
                 </div>
 
