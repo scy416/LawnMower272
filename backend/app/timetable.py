@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from app.database.database import get_db
-from app.database.models import User, UserModule, Assignment
+from app.database.models import User, UserModule, Assignment, Module
 from app.auth.dependencies import get_current_user
 
 router = APIRouter()
@@ -27,7 +28,7 @@ def get_timetable(
     db: Session = Depends(get_db)
 ):
     user_modules = db.query(UserModule).filter(UserModule.user_id == current_user.id).all()
-    module_codes = [um[0] for um in user_modules]
+    module_codes = [um.module_code for um in user_modules]
     if not module_codes:
         return []
     all_assignments = db.query(Assignment).filter(Assignment.module_code.in_(module_codes)).all()
@@ -66,3 +67,20 @@ def remove_module(
     ).delete()
     db.commit()
     return {"status": "success", "message": f"Module {mod} removed"}
+
+@router.get("/api/search/modules", response_model=List[str])
+def search_available_modules(q: str, db: Session = Depends(get_db)):
+    if not q:
+        return []
+    matches = db.query(Module.code)\
+                .filter(
+                    or_(
+                        Module.code.ilike(f"%{q}%"),
+                        Module.name.ilike(f"%{q}%") 
+                        #Module name not really added to database in seed.py yet
+                    )
+                )\
+                .limit(10)\
+                .all()
+                
+    return [match[0] for match in matches]

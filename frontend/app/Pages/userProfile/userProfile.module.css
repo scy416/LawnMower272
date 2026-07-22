@@ -189,3 +189,50 @@
   border-radius: 16px;
   font-size: 13px;
 }
+
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #e2e8f0;
+  color: #0f172a;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pill-remove {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pill-remove:hover {
+  color: #dc2626;
+}
+
+.sb-container {
+  width: 100%;
+}
+
+.sb-form {
+  display: flex;
+  align-items: center; 
+  gap: 12px;
+  width: 100%;
+}

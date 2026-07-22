@@ -1,7 +1,8 @@
+# Script to generate random data in database
 import random
 from faker import Faker
 from app.database.database import SessionLocal
-from app.database.models import User, UserProfile, UserModule, Assignment
+from app.database.models import User, UserProfile, UserModule, Assignment, Module
 
 fake = Faker()
 
@@ -32,13 +33,17 @@ MODULE_POOL = [
     "CP2106", "CP3106", "CP3209",
 ]
 
-# Print statements for my own debugging
 def seed_database(num_users=100):
     db = SessionLocal()
 
     try:
         for mod in MODULE_POOL:
-            # Random "Assignment N" on random weeks (excluding W7 and W13)
+            new_module = Module(code=mod)
+            db.add(new_module)
+
+        db.commit()
+
+        for mod in MODULE_POOL:
             available_weeks = [w for w in range(2, 13) if w != 7]
             num_assignments = random.randint(3, 6)
             assignment_weeks = sorted(random.sample(available_weeks, num_assignments))
@@ -51,14 +56,14 @@ def seed_database(num_users=100):
                 )
                 db.add(new_assignment)
 
-            # Every module gets Mid-Term on W7
+            # ensure mid term on w7
             db.add(Assignment(
                 module_code=mod,
                 assignment_name="Mid-Term",
                 deadline="W7"
             ))
 
-            # Every module gets Final Examination on W13
+            # ensure finals on w13
             db.add(Assignment(
                 module_code=mod,
                 assignment_name="Final Examination",

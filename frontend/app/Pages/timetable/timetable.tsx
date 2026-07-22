@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router';
 import styles from './timetable.module.css'; 
 import { getCurrentSemesterWeek } from '~/utils';
 import { type Assignment } from '../../types';
-import { getProfile, getFriends, getPendingRequests, getInbox } from '../../hooks';
-import ModuleSearch from './moduleSearch';
+import { getProfile, getFriends, getInbox, userAuth } from '../../hooks';
+import { fetchModuleSuggestions } from '~/utils';
+import SearchBox from '../../Components/searchBox';
 
 function Timetable() {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [moduleInput, setModuleInput] = useState<string>('');
-  
+  const { getToken } = userAuth();
   const { profile, loadProfileInfo } = getProfile();
   const { friends } = getFriends();
-  const { pendingRequests } = getPendingRequests();
   const { conversations } = getInbox();
 
   const handleLogout = () => {
@@ -21,26 +21,9 @@ function Timetable() {
     navigate("/");
   };
 
-  const handleStartChat = async (targetUserId: number) => {
-    const token = localStorage.getItem("access_token");
-    if (!token) return;
-    try {
-      const res = await fetch(`http://localhost:8000/social/chat/${targetUserId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        navigate(`/chat/${data.conversation_id}`);
-      }
-    } catch (err) {
-      console.error("Failed to start chat:", err);
-    }
-  };
-
   const handleRemoveModule = async (moduleCode: string) => {
     try {
-      const token = localStorage.getItem("access_token");
+      const token = getToken();
       const response = await fetch(`http://localhost:8000/api/modules/${moduleCode}`, {
         method: 'DELETE',
         headers: {
@@ -86,54 +69,27 @@ function Timetable() {
   }, [navigate]);
 
   const handleAddModule = async (moduleCode: string) => {
-  try {
-    const token = localStorage.getItem("access_token");
-    const response = await fetch('http://localhost:8000/api/modules', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      // Pass the code we received from the child component!
-      body: JSON.stringify({ module_code: moduleCode }), 
-    });
-
-    if (response.ok) {
-      const newModuleAssignments: Assignment[] = await response.json();
-      const existingIds = new Set(assignments.map(a => a.id));
-      const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
-      setAssignments([...assignments, ...filteredNew]);
-    }
-  } catch (error) {
-    console.error("Error adding module:", error);
-  }
-};
-  /* const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
     try {
-      const token = localStorage.getItem("access_token");
+      const token = getToken();
       const response = await fetch('http://localhost:8000/api/modules', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ module_code: moduleInput }),
+        body: JSON.stringify({ module_code: moduleCode }), 
       });
 
       if (response.ok) {
         const newModuleAssignments: Assignment[] = await response.json();
-        
         const existingIds = new Set(assignments.map(a => a.id));
         const filteredNew = newModuleAssignments.filter(a => !existingIds.has(a.id));
-        
         setAssignments([...assignments, ...filteredNew]);
-        setModuleInput('');
       }
     } catch (error) {
       console.error("Error adding module:", error);
     }
-  }; */
+  }; 
 
   const uniqueModules = Array.from(new Set(assignments.map(task => task.module_code)));
 
@@ -182,7 +138,15 @@ function Timetable() {
 
         <div className={styles['dashboard-container']}>
         
-        <ModuleSearch onAddModule={handleAddModule} />
+        <SearchBox placeholder="Enter Module Code" 
+        buttonText="Add Module" onSelect={handleAddModule} 
+        fetchSuggestions={(query) => fetchModuleSuggestions(query, getToken())} 
+
+        containerClassName={styles['search-container']}
+        formClassName={styles['module-form']} 
+        inputClassName={styles['module-input']} 
+        buttonClassName={styles['btn-add']}
+        />
 
         <div className={styles.summary}>
           

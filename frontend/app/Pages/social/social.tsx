@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import styles from "./social.module.css";
-import SearchBar from "./searchBar";
+import SearchBar from "../../Components/searchBox";
 import NavigationTabs from "./navTab";
 import SeniorCard from "../../Components/seniorCard";
 import { userAuth, getProfile, getFriends, getPendingRequests } from "../../hooks";
@@ -12,6 +12,7 @@ export default function Social() {
   const navigate = useNavigate();
   const [discoverUsers, setDiscoverUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchedUserCards, setSearchedUserCards] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>("discover");
 
   const { getToken } = userAuth();
@@ -39,6 +40,29 @@ export default function Social() {
       console.error("Failed to fetch discover:", err);
     }
   };
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchedUserCards([]);
+      return;
+    }
+
+    const delay = setTimeout(async () => {
+      try {
+        const res = await fetch(`http://localhost:8000/social/api/search/profiles?q=${searchQuery}`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setSearchedUserCards(data);
+        }
+      } catch (err) {
+        console.error("Failed to search profiles:", err);
+      }
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchQuery, getToken]);
 
   const handleAddFriend = async (targetUserId: number) => {
     try {
@@ -108,17 +132,14 @@ export default function Social() {
     }
   };
 
-  const filteredDiscover = discoverUsers.filter((user) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return user.name.toLowerCase().includes(q) || user.major.toLowerCase().includes(q);
-  });
-
   const filteredFriends = (friends as any[]).filter((friend) => {
     if (!searchQuery) return true;
     return friend.username.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
+  const displayedSeniors = searchQuery.trim() !== "" 
+          ? searchedUserCards 
+          : discoverUsers;
 
   return (
     <div className={styles["social-page"]}>
@@ -138,13 +159,28 @@ export default function Social() {
           </div>
         </div>
 
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <SearchBar 
+          placeholder="Search all users by name..."
+          buttonText="Search"
+          onInputChange={(val) => setSearchQuery(val)} 
+          onSelect={() => {}} 
+          fetchSuggestions={async () => []} 
+          hideDropdown={true} 
+
+          containerClassName={styles["sb-container"]} 
+          formClassName={styles["sb-form"]} 
+          inputClassName={styles["sb-input"]} 
+          buttonClassName={styles["sb-button"]}
+          icon="🔍"
+          iconClassName={styles["sb-icon"]}
+          inputWrapperClassName={styles["sb-input-wrapper"]}
+        />
         <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} pendingCount={pendingRequests.length} />
 
         {activeTab === "discover" && (
           <>
-            <SeniorCard seniors={filteredDiscover} handleAddFriend={handleAddFriend} />
-            {filteredDiscover.length === 0 && (
+            <SeniorCard seniors={displayedSeniors} handleAddFriend={handleAddFriend} />
+            {displayedSeniors.length === 0 && (
               <p className={styles["empty-msg"]}>No users found.</p>
             )}
           </>
