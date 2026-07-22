@@ -16,11 +16,14 @@ from app.social.socialMain import router as social_router
 from app.social.inbox import router as inbox_router
 from app.chatbot.chatbotMain import router as chatbot_router
 from app.forum.forumMain import router as forum_router
+from app.social.scheduler import lifespan
 
 
 #Base.metadata.create_all(bind=engine) //this allows fastapi to create tables, we let alembic do the work instead
 
 app = FastAPI()
+
+#app = FastAPI(lifespan=lifespan) ##TO run automatically recommendation algorithm
 
 app.add_middleware(
     CORSMiddleware,
