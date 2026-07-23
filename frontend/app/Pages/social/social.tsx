@@ -5,6 +5,7 @@ import SearchBar from "../../Components/searchBox";
 import NavigationTabs from "./navTab";
 import SeniorCard from "../../Components/seniorCard";
 import { userAuth, getProfile, getFriends, getPendingRequests } from "../../hooks";
+import { API_URL } from "~/config";
 
 type Tab = "discover" | "friends" | "requests";
 
@@ -32,7 +33,7 @@ export default function Social() {
 
   const fetchDiscover = async () => {
     try {
-      const res = await fetch("http://localhost:8000/social/discover", {
+      const res = await fetch(`${API_URL}/social/discover`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (res.ok) setDiscoverUsers(await res.json());
@@ -66,7 +67,7 @@ export default function Social() {
 
   const handleAddFriend = async (targetUserId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/friends/requests/send/${targetUserId}`, {
+      const res = await fetch(`${API_URL}/friends/requests/send/${targetUserId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
       });
@@ -81,7 +82,7 @@ export default function Social() {
 
   const handleAcceptRequest = async (requestId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/friends/requests/accept/${requestId}`, {
+      const res = await fetch(`${API_URL}/friends/requests/accept/${requestId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${getToken()}` },
       });
@@ -93,7 +94,7 @@ export default function Social() {
 
   const handleRejectRequest = async (requestId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/friends/requests/reject/${requestId}`, {
+      const res = await fetch(`${API_URL}/friends/requests/reject/${requestId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${getToken()}` },
       });
@@ -105,7 +106,7 @@ export default function Social() {
 
   const handleStartChat = async (targetUserId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/social/chat/${targetUserId}`, {
+      const res = await fetch(`${API_URL}/social/chat/${targetUserId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
       });
@@ -120,7 +121,7 @@ export default function Social() {
 
   const handleRemoveFriend = async (friendId: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/friends/delete/${friendId}`, {
+      const res = await fetch(`${API_URL}/friends/delete/${friendId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${getToken()}` },
       });

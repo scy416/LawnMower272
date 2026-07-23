@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { userAuth } from "~/hooks";
 import { getCurrentSemesterWeek } from "~/utils";
 import styles from "./todo.module.css";
+import { API_URL } from "~/config";
 
 interface Assignment {
   id: number;
@@ -27,7 +28,7 @@ export default function TodoPage() {
       const token = getToken();
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:8000/api/timetable", {
+        const res = await fetch(`${API_URL}/api/timetable`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.status === 401) { handleUnauthorized(); return; }

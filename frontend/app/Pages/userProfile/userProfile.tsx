@@ -4,6 +4,7 @@ import styles from "./userProfile.module.css";
 import { getProfile, userAuth } from "../../hooks";
 import { ModuleSelector } from "~/Components/moduleSelector";
 import { fetchModuleSuggestions } from "~/utils";
+import { API_URL } from "~/config";
 
 interface FormData {
     bio: string;
@@ -62,7 +63,7 @@ export default function UserProfile() {
         updatedFields.modulesTaken = formData.modulesTaken;
         updatedFields.modulesToTake = formData.modulesToTake;
 
-        const res = await fetch("http://localhost:8000/profile/me", {
+        const res = await fetch(`${API_URL}/profile/me`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify(updatedFields),
@@ -79,7 +80,6 @@ export default function UserProfile() {
     const handleAddModule = (listName: "modulesTaken" | "modulesToTake", mod: string) => {
         if (!mod) return;
         setFormData(prev => {
-            // Prevent duplicates!
             if (prev[listName].includes(mod)) return prev;
             return { ...prev, [listName]: [...prev[listName], mod] };
         });

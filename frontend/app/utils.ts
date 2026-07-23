@@ -1,3 +1,5 @@
+import { API_URL } from "./config";
+
 /**
  * Returns the current NUS semester week (1-13).
  * Returns 0 if we're in vacation / between semesters.
@@ -26,7 +28,7 @@ export function getCurrentSemesterWeek(): number {
 export const fetchModuleSuggestions = async (query: string, token: string | null): Promise<string[]> => {
     if (!token) return [];
     
-    const res = await fetch(`http://localhost:8000/api/search/modules?q=${query}`, {
+    const res = await fetch(`${API_URL}/api/search/modules?q=${query}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     

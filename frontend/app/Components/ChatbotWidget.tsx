@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './ChatbotWidget.module.css';
+import { API_URL } from '~/config';
 
 interface Message {
   role: 'user' | 'bot';
@@ -33,7 +34,7 @@ export default function ChatbotWidget() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/chatbot/message', {
+      const response = await fetch(`${API_URL}chatbot/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: newMessages }),

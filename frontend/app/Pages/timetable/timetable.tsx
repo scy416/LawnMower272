@@ -6,6 +6,7 @@ import { type Assignment } from '../../types';
 import { getProfile, getFriends, getInbox, userAuth } from '../../hooks';
 import { fetchModuleSuggestions } from '~/utils';
 import SearchBox from '../../Components/searchBox';
+import { API_URL } from '~/config';
 
 function Timetable() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ function Timetable() {
   const handleRemoveModule = async (moduleCode: string) => {
     try {
       const token = getToken();
-      const response = await fetch(`http://localhost:8000/api/modules/${moduleCode}`, {
+      const response = await fetch(`${API_URL}/api/modules/${moduleCode}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -47,7 +48,7 @@ function Timetable() {
       return;
     }
 
-    fetch('http://localhost:8000/api/timetable', {
+    fetch(`${API_URL}/api/timetable`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -71,7 +72,7 @@ function Timetable() {
   const handleAddModule = async (moduleCode: string) => {
     try {
       const token = getToken();
-      const response = await fetch('http://localhost:8000/api/modules', {
+      const response = await fetch(`${API_URL}/api/modules`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { userAuth } from "~/hooks";
 import styles from "./forum.module.css";
+import { API_URL } from "~/config";
 
 interface ModuleInfo {
   module_code: string;
@@ -29,14 +30,14 @@ export default function ForumHome() {
       if (!token) return;
 
       try {
-        const forumRes = await fetch("http://localhost:8000/forum/modules", {
+        const forumRes = await fetch(`${API_URL}/forum/modules`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (forumRes.status === 401) { handleUnauthorized(); return; }
         if (forumRes.ok) setAllModules(await forumRes.json());
 
-        const timetableRes = await fetch("http://localhost:8000/api/timetable", {
+        const timetableRes = await fetch(`${API_URL}/api/timetable`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

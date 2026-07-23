@@ -14,6 +14,9 @@ from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+@app.get("/")
+def server():
+    return {"message": "online"}
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):

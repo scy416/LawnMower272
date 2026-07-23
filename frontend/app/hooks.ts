@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { type Profile, type Friend } from "./types";
+import { API_URL } from "./config";
 
 export function userAuth() {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export function getProfile() {
         const token = getToken();
         if (!token) return;
     
-        const res = await fetch("http://localhost:8000/profile/me", {
+        const res = await fetch(`${API_URL}/profile/me`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (res.status === 401) {
@@ -76,7 +77,7 @@ export function getFriends() {
         try{
             const token = getToken();
 
-            const res = await fetch("http://localhost:8000/friends/friends_list", {
+            const res = await fetch(`${API_URL}/friends/friends_list`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -121,7 +122,7 @@ export function getPendingRequests() {
             const token = getToken();
             if (!token) return;
 
-            const res = await fetch("http://localhost:8000/friends/requests/pending", {
+            const res = await fetch(`${API_URL}/friends/requests/pending`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -160,7 +161,7 @@ export function getInbox() {
             const token = getToken();
             if (!token) return;
 
-            const res = await fetch("http://localhost:8000/inbox/me", {
+            const res = await fetch(`${API_URL}/inbox/me`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

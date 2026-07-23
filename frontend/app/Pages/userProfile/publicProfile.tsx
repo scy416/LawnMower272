@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import styles from "../userProfile/userProfile.module.css";
 import { userAuth } from "../../hooks";
+import { API_URL } from "~/config";
 
 interface PublicProfileData {
   username: string;
@@ -28,7 +29,7 @@ export default function PublicProfile() {
       const token = getToken();
       if (!token) return;
 
-      const profileRes = await fetch(`http://localhost:8000/profile/${userId}`, {
+      const profileRes = await fetch(`${API_URL}/profile/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -38,7 +39,7 @@ export default function PublicProfile() {
         setNotFound(true);
       }
 
-      const friendsRes = await fetch("http://localhost:8000/friends/friends_list", {
+      const friendsRes = await fetch(`${API_URL}/friends/friends_list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -53,7 +54,7 @@ export default function PublicProfile() {
   const handleAddFriend = async () => {
     const token = getToken();
     if (!token) return;
-    const res = await fetch(`http://localhost:8000/friends/requests/send/${userId}`, {
+    const res = await fetch(`${API_URL}/friends/requests/send/${userId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     });

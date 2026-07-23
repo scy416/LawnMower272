@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { userAuth } from "~/hooks";
 import styles from "./forum.module.css";
+import { API_URL } from "~/config";
 
 interface Review {
   id: number;
@@ -54,7 +55,7 @@ export default function ForumModule() {
     const token = getToken();
     if (!token) return;
     try {
-      const reviewRes = await fetch(`http://localhost:8000/forum/reviews/${code}`, {
+      const reviewRes = await fetch(`${API_URL}/forum/reviews/${code}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -65,7 +66,7 @@ export default function ForumModule() {
 
       if (reviewRes.ok) setReviews(await reviewRes.json());
 
-      const summaryRes = await fetch(`http://localhost:8000/forum/summary/${code}`, {
+      const summaryRes = await fetch(`${API_URL}/forum/summary/${code}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -88,7 +89,7 @@ export default function ForumModule() {
     const token = getToken();
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:8000/forum/reviews", {
+      const res = await fetch(`${API_URL}/forum/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ module_code: code, rating, comment: comment.trim() || null }),
@@ -107,7 +108,7 @@ export default function ForumModule() {
     if (!confirm("Delete your review?")) return;
     const token = getToken();
     if (!token) return;
-    const res = await fetch(`http://localhost:8000/forum/reviews/${reviewId}`, {
+    const res = await fetch(`${API_URL}/forum/reviews/${reviewId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

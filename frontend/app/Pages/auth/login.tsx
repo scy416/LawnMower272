@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router";
 import styles from "./signUp.module.css";
+import { API_URL } from "~/config";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Login() {
       formData.append("username", emailOrUsername); 
       formData.append("password", password);
 
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const res = await fetch(`${API_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: formData,
