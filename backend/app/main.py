@@ -32,6 +32,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def server():
+    return {"message": "online"}
+
 app.add_exception_handler(RequestValidationError, invalid_email_format)
 
 
