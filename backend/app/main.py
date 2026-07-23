@@ -18,7 +18,6 @@ from app.chatbot.chatbotMain import router as chatbot_router
 from app.forum.forumMain import router as forum_router
 from app.social.scheduler import lifespan
 
-
 #Base.metadata.create_all(bind=engine) //this allows fastapi to create tables, we let alembic do the work instead
 
 app = FastAPI()
