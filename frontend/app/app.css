@@ -1,3 +1,4 @@
+@import url("https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,600,700,800&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -31,7 +32,6 @@ body {
   padding: 0;
 }
 
-/* shared nav button used across all pages */
 .nav-btn-global {
   background: #ffffff;
   color: #0b2d5a;

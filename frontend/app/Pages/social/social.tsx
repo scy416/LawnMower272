@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import styles from "./social.module.css";
 import SearchBar from "../../Components/searchBox";
 import NavigationTabs from "./navTab";
@@ -23,7 +23,7 @@ export default function Social() {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    navigate("/");
+    window.location.href = "/"; 
   };
 
   useEffect(() => {
@@ -148,7 +148,9 @@ export default function Social() {
         <div className={styles.topbar}>
           <div className={styles["topbar-title"]}>SyllaBuddy</div>
           <div className={styles["nav-links"]}>
-            <button className="nav-btn-global" onClick={() => navigate("/timetable")}>Home</button>
+            <Link to="/timetable" className="nav-btn-global" style={{ textDecoration: 'none', display: 'inline-block' }}>
+              Home
+            </Link>
             <button className="nav-btn-global" onClick={handleLogout}>Sign out</button>
           </div>
         </div>

@@ -22,7 +22,11 @@ export default function PublicProfile() {
   const [notFound, setNotFound] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [friendRequested, setFriendRequested] = useState(false);
-  const isOwnProfile = String(getUserId()) === userId;
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+  useEffect(() => {
+    setIsOwnProfile(String(getUserId()) === userId);
+  }, [userId]);
 
   useEffect(() => {
     const load = async () => {
