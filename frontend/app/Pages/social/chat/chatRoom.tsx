@@ -2,6 +2,7 @@ import { useState, useEffect, type SyntheticEvent } from "react";
 import { useParams, useNavigate } from "react-router";
 import styles from "./chatRoom.module.css"; 
 import { userAuth, getInbox } from "~/hooks";
+import { API_URL } from "~/config";
 
 interface Message {
   id: number;
@@ -26,7 +27,7 @@ export default function ChatRoom() {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/inbox/chat/${conversationId}`, {
+                const res = await fetch(`${API_URL}/inbox/chat/${conversationId}`, {
                     headers: { "Authorization": `Bearer ${getToken()}` }
                 });
                 if (res.ok) {
@@ -56,7 +57,7 @@ export default function ChatRoom() {
         setInputText("");
 
         try {
-            await fetch(`http://localhost:8000/inbox/send_msg/${conversationId}`, {
+            await fetch(`${API_URL}/inbox/send_msg/${conversationId}`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",

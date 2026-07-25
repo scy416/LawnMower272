@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import styles from "./inbox.module.css";
 import { userAuth } from "~/hooks";
+import { API_URL } from "~/config";
 
 interface ChatPreview {
   conversation_id: number;
@@ -20,7 +21,7 @@ export default function Inbox() {
   useEffect(() => {
     const fetchInbox = async () => {
       try {
-        const res = await fetch("http://localhost:8000/inbox/me", {
+        const res = await fetch(`${API_URL}/inbox/me`, {
           headers: { "Authorization": `Bearer ${getToken()}` }
         });
         if (res.ok) {

@@ -50,7 +50,7 @@ export default function Social() {
 
     const delay = setTimeout(async () => {
       try {
-        const res = await fetch(`http://localhost:8000/social/api/search/profiles?q=${searchQuery}`, {
+        const res = await fetch(`${API_URL}/social/api/search/profiles?q=${searchQuery}`, {
           headers: { Authorization: `Bearer ${getToken()}` },
         });
         if (res.ok) {
