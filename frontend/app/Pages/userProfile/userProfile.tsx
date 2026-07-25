@@ -56,24 +56,38 @@ export default function UserProfile() {
         if (!token) return;
         setSaving(true);
 
-        const updatedFields: Record<string, any> = {};
-        if (formData.bio) updatedFields.bio = formData.bio;
-        if (formData.major) updatedFields.major = formData.major;
-        if (formData.year) updatedFields.year = Number(formData.year);
-        updatedFields.modulesTaken = formData.modulesTaken;
-        updatedFields.modulesToTake = formData.modulesToTake;
+        const updatedFields = {
+            bio: formData.bio,
+            major: formData.major,
+            year: formData.year ? Number(formData.year) : null, 
+            modulesTaken: formData.modulesTaken,
+            modulesToTake: formData.modulesToTake,
+        };
 
-        const res = await fetch(`${API_URL}/profile/me`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify(updatedFields),
-        });
+        try {
+            const res = await fetch(`${API_URL}/profile/me`, {
+                method: "PATCH",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    Authorization: `Bearer ${token}` 
+                },
+                body: JSON.stringify(updatedFields),
+            });
 
-        setSaving(false);
-        if (res.ok) {
-            setSaved(true);
-            await loadProfileInfo();
-            setTimeout(() => setSaved(false), 2000);
+            setSaving(false);
+
+            if (res.ok) {
+                setSaved(true);
+                await loadProfileInfo(); 
+                setTimeout(() => setSaved(false), 2000);
+            } else {
+                const errorData = await res.json();
+                console.error("Backend rejected the save:", errorData);
+                alert("Failed to save! Check the F12 console for the exact error.");
+            }
+        } catch (err) {
+            setSaving(false);
+            console.error("Network error while saving:", err);
         }
     };
 

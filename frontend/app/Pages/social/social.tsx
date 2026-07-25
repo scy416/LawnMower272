@@ -148,9 +148,12 @@ export default function Social() {
         <div className={styles.topbar}>
           <div className={styles["topbar-title"]}>SyllaBuddy</div>
           <div className={styles["nav-links"]}>
-            <Link to="/timetable" className="nav-btn-global" style={{ textDecoration: 'none', display: 'inline-block' }}>
+            <button 
+              className="nav-btn-global" 
+              onClick={() => window.location.href = "/timetable"}
+            >
               Home
-            </Link>
+            </button>
             <button className="nav-btn-global" onClick={handleLogout}>Sign out</button>
           </div>
         </div>

@@ -19,7 +19,8 @@ def get_user_profile(user_id: int, current_user: User = Depends(get_current_user
     if not target_user:
         raise HTTPException(status_code=404, detail="User not found.")
     return build_profile_response(target_user)
-
+    
+@router.patch("/me", response_model=ProfileResponse, status_code=status.HTTP_200_OK)
 def update_profile(updated_data: ProfileUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     update_dict = updated_data.model_dump(exclude_unset=True)
 
