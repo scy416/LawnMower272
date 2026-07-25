@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
 import styles from "./social.module.css";
 import SearchBar from "../../Components/searchBox";
 import NavigationTabs from "./navTab";
@@ -27,9 +27,19 @@ export default function Social() {
   };
 
   useEffect(() => {
-    loadProfileInfo();
-    fetchDiscover();
-  }, []);
+      loadProfileInfo();
+      fetchDiscover();
+      refetchFriends();  
+      refetchRequests(); 
+    }, []);
+    
+  useEffect(() => {
+      if (activeTab === "friends") {
+        refetchFriends();
+      } else if (activeTab === "requests") {
+        refetchRequests();
+      }
+    }, [activeTab]);
 
   const fetchDiscover = async () => {
     try {
