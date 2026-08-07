@@ -60,7 +60,7 @@ def compute_daily_recommendations():
                         want_data.append(1.0)
 
         if not taken_data:
-            print("Not enough module data to compute recommendations.")
+            print("Not enough data")
             return
 
         M_taken = csr_matrix((taken_data, (taken_rows, taken_cols)), shape=(num_users, num_modules))
@@ -138,4 +138,4 @@ def compute_daily_recommendations():
 if __name__ == "__main__":
     compute_daily_recommendations()
 
-#TODO : SET UP AUTOMATIC SCHEDULER TO RUN THIS SCRIPT
+#TODO : SET UP AUTOMATIC SCHEDULER TO RUN THIS SCRIPT 
